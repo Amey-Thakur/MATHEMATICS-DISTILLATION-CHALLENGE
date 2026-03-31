@@ -1,11 +1,6 @@
-﻿# Magma Theory Distillation: Stage 1 Cheatsheet
-**Prepared by**: Amey Thakur
+﻿### Module 1: Determining the VERDICT (Master Laws)
 
-This research distillation maps equational logic to the required output fields: **VERDICT**, **REASONING**, **PROOF**, and **COUNTEREXAMPLE**.
-
-## Module 1: Determining the VERDICT
-
-Use these "Master Laws" for rapid binary decisions ( \implies E_2$):
+Rapid binary decisions ( \implies E_2$):
 
 | Master Law ID | Mathematical Expression | Impact / Implications |
 | :--- | :--- | :--- |
@@ -15,56 +10,37 @@ Use these "Master Laws" for rapid binary decisions ( \implies E_2$):
 | **ID 3744** |  = (xz)(wy)$ | "Bypass Law"; implies Putnam laws. |
 | **ID 4, ID 5** |  = x \circ y$ ,  = y \circ x$ | Left/Right Zero Magmas. |
 
-### Quick-Check Decision Tree:
-*   If $ is an **Austin Master** (e.g., 28770), VERDICT = **TRUE**.
+*   If $ matches an **Austin Master** (e.g., 28770), VERDICT = **TRUE**.
 *   If $ is symmetric ( = E_1^*$) but $ is not, VERDICT = **FALSE**.
 
-## Module 2: Constructing the REASONING
+### Module 2: Constructing the REASONING
 
-Analyze structural connectivity to explain the outcome:
-
-1.  **Singleton Collapse**: If $ allows $ to be isolated twice with differing neighbors (e.g.,  = y \circ y$ and  = T$), the theory collapses to =y$.
+1.  **Singleton Collapse**: If $ allows $ to be isolated twice with differing neighbors (e.g.,  = y \circ y$ and  = T$), theory collapses to =y$.
 2.  **Parentheses Balance**: If $ is balanced but $ disrupts nesting without Associativity ( 4512$), structural deduction fails.
-3.  **Variable Displacement**: If a variable present in $ is absent from $, check for "Constant" or "Zero" property inheritance.
-4.  **Duality Principle**: If $ is a dual of a known law (^*$), the reasoning for the base law applies mirror-symmetrically.
+3.  **Variable Displacement**: If a variable in $ is missing in $, check for "Constant" or "Zero" property inheritance.
+4.  **Duality Principle**: If $ is a dual (^*$), the reasoning for the base law applies mirror-symmetrically.
 
-## Module 3: Developing the PROOF
+### Module 3: Developing the PROOF
 
-For **TRUE** verdicts, apply these formal substitution rules:
-
+For **TRUE** cases:
 *   **Rewrite Pattern**: Treat $ as a directional rule  \to R$.
-*   **Substitutivity**: [x/S] = U[x/S]$ is the primary deductive mechanism.
-*   **Transitivity**: If  \implies E_k$ and  \implies E_2$, link the steps.
+*   **Substitutivity**: Use [x/S] = U[x/S]$ as the primary mechanism.
 *   **Specific Proofs**:
     *   **Putnam (ID 14, 29)**:  = y(xy) \iff x = (yx)y$. Link via  \circ y$ substitution into $.
     *   **Idempotency (ID 3)**: Use  1076$ substitutions to reach =x$.
 
-## Module 4: Generating the COUNTEREXAMPLE
+### Module 4: Generating the COUNTEREXAMPLE
 
-For **FALSE** verdicts, identify the refuting magma structure:
+For **FALSE** cases:
+1.  **Left-Projection Magma** ( \circ y = x$): Refutes Commutativity (=yx$).
+2.  **Right-Projection Magma** ( \circ y = y$): Refutes Commutativity and Left-Zero laws.
+3.  **Constant Magma** ( \circ y = c$): Refutes Idempotence (=x$).
+4.  **The Fixed-Point Trap**: If $ is =xy$, use a 2-element magma where  \circ 0 = 0 \circ 1 = 0$ but  \circ 1 = 1$.
 
-1.  **Left-Projection Magma** ( \circ y = x$):
-    *   **Refutes**: Commutativity (=yx$).
-    *   **Validates**: Left-Zero laws.
-2.  **Right-Projection Magma** ( \circ y = y$):
-    *   **Refutes**: Commutativity and Left-Zero laws.
-3.  **Constant Magma** ( \circ y = c$):
-    *   **Refutes**: Idempotence (=x$).
-4.  **The Fixed-Point Trap**: 
-    *   If $ is =xy$, use a 2-element magma where  \circ 0 = 0 \circ 1 = 0$ but  \circ 1 = 1$.
-
----
-
-## Module 5: Benchmark Bottlenecks (Caution IDs)
-
-Apply extreme audit precision if $ matches these IDs:
+### Module 5: Benchmark Bottlenecks (Caution)
 
 | Bottleneck ID | Trap Category | Guardrail / Refutation |
 | :--- | :--- | :--- |
 | **706** | Projection Gap | Often **FALSE** for non-nested targets. |
 | **1274** | Nesting Mirage | Does **not** imply global commutativity. |
 | **1516** | Singleton Mirage | Appears to collapse but remains non-trivial. |
-
----
-**Prepared by**: Amey Thakur
-**Status**: Stage 1 Highly-Optimized (~8.6 KB)
