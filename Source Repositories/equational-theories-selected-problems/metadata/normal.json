@@ -1,0 +1,12 @@
+{
+  "subset_name": "normal",
+  "source": "official",
+  "curators": [],
+  "difficulty": "normal",
+  "problem_count": 1000,
+  "true_count": 500,
+  "false_count": 500,
+  "selection_method": "programmatic",
+  "derived_from": null,
+  "notes": ""
+}
