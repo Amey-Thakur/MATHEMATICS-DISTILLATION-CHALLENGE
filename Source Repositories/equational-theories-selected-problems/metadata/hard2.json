@@ -1,0 +1,12 @@
+{
+  "subset_name": "hard2",
+  "source": "official",
+  "curators": [],
+  "difficulty": "hard",
+  "problem_count": 200,
+  "true_count": 100,
+  "false_count": 100,
+  "selection_method": "human_ai",
+  "derived_from": null,
+  "notes": ""
+}

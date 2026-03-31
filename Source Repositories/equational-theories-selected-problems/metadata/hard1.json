@@ -1,0 +1,12 @@
+{
+  "subset_name": "hard1",
+  "source": "official",
+  "curators": [],
+  "difficulty": "hard",
+  "problem_count": 69,
+  "true_count": 24,
+  "false_count": 45,
+  "selection_method": "human_ai",
+  "derived_from": "hard",
+  "notes": "Deduplicated version of the hard subset; contains no duplicate problems."
+}

@@ -1,0 +1,16 @@
+equational_theories/Generated/TrivialBruteforce/theorems/*.lean linguist-generated
+equational_theories/Generated/EquationSearch/theorems/*.lean linguist-generated
+equational_theories/Generated/Equation1.lean linguist-generated
+equational_theories/Generated/FinitePoly/Refutation*.lean linguist-generated
+equational_theories/Generated/FinitePoly.lean linguist-generated
+equational_theories/Generated/All4x4Tables/Refutation*.lean linguist-generated
+equational_theories/Generated/All4x4Tables.lean linguist-generated
+equational_theories/Generated/FinSearch/theorems/*.lean linguist-generated
+equational_theories/Generated/FinSearch.lean linguist-generated
+equational_theories/Generated/MagmaEgg/*/*.lean linguist-generated
+equational_theories/Generated/MagmaEgg/*.lean linguist-generated
+equational_theories/Generated/VampireProven.lean linguist-generated
+equational_theories/Generated/VampireProven/*.lean linguist-generated
+equational_theories/Generated/Greedy/*.lean linguist-generated
+equational_theories/Generated/FiniteImplicationSearch/theorems/*.lean linguist-generated
+data/forcing_rules/* linguist-generated

@@ -1,0 +1,197 @@
+name: Compile blueprint and paper
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.lean'
+      - '**/blueprint-paper.yml'
+      - 'blueprint/**'
+      - 'commentary/**'
+      - 'home_page/**'
+      - 'tools/fme/**'
+      - '**/generate_dashboard.py'
+      - '**/generate_dashboard_graph_info.rb'
+      - '**/generate_equation_implication_js.py'
+      - '**/generate_equation_explorer_graph.py'
+      - '**/generate_graphiti_data.rb'
+      - 'lean-toolchain'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
+      - 'paper/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**/*.lean'
+      - '**/blueprint-paper.yml'
+      - 'blueprint/**'
+      - 'commentary/**'
+      - 'home_page/**'
+      - 'tools/fme/**'
+      - '**/generate_dashboard.py'
+      - '**/generate_dashboard_graph_info.rb'
+      - '**/generate_equation_implication_js.py'
+      - '**/generate_equation_explorer_graph.py'
+      - '**/generate_graphiti_data.rb'
+      - './scripts/**'
+      - 'lean-toolchain'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
+      - 'paper/**'
+  workflow_dispatch: # Allow manual triggering of the workflow from the GitHub Actions interface
+
+# Cancel previous runs if a new commit is pushed to the same PR or branch
+concurrency:
+  group: ${{ github.ref }}  # Group runs by the ref (branch or PR)
+  cancel-in-progress: true  # Cancel any ongoing runs in the same group
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages and modify PR labels
+permissions:
+  contents: read          # Read access to repository contents
+  pages: write            # Write access to GitHub Pages
+  id-token: write         # Write access to ID tokens
+  issues: write           # Write access to issues
+  pull-requests: write    # Write access to pull requests
+
+jobs:
+  build_project:
+    runs-on: ubuntu-latest
+    name: Build project
+    steps:
+      - name: Cleanup to free disk space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: false
+          # all of these default to true, but feel free to set to
+          # "false" if necessary for your workflow
+          android: true
+          dotnet: false
+          haskell: false
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+
+      - name: Add 'awaiting-CI' label
+        if: >
+          github.event_name == 'pull_request'
+        run: |
+          curl --request POST \
+            --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels \
+            --header 'authorization: Bearer ${{ secrets.PAT_TOKEN }}' \
+            --header 'Content-Type: application/json' \
+            --data '["awaiting-CI"]'
+
+      - name: Checkout project
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Fetch all history for all branches and tags
+
+      - name: Install elan
+        run: curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
+
+      - name: Get Mathlib cache
+        run: ~/.elan/bin/lake exe cache get || true
+
+      - name: Cache build artifacts and Mathlib API docs
+        uses: actions/cache@v5
+        with:
+          path: |
+            .lake/build
+            !.lake/build/doc-data
+            !.lake/build/doc/declarations/declaration-data-equational_theories*
+          key: LakeBuild-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}
+          #restore-keys: LakeBuild-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}
+
+      - name: Build project
+        run: ~/.elan/bin/lake build equational_theories
+
+      - name: Check environment with lean4checker
+        run: |
+          : Check Environment with lean4checker
+          chmod +x ./scripts/lean4_checker/run_lean4checker.sh
+          ./scripts/lean4_checker/run_lean4checker.sh
+        shell: bash
+
+      #- name: Check with lean4lean
+      #  run: |
+      #      python scripts/lean4lean_checker/main.py
+
+      - name: Generate graph data
+        run: |
+          mkdir /tmp/raw_data
+          ~/.elan/bin/lake exe extract_implications --json > /tmp/raw_data/general.json
+          ~/.elan/bin/lake exe extract_implications --json --closure --only-implications > /tmp/raw_data/general_implications_closure.json
+          ~/.elan/bin/lake exe extract_implications raw --full-entries > /tmp/raw_data/general_raw_full_entries.json
+          ~/.elan/bin/lake exe extract_implications outcomes > /tmp/raw_data/general_outcomes.json
+
+          ~/.elan/bin/lake exe extract_implications --json --finite-only > /tmp/raw_data/finite.json
+          ~/.elan/bin/lake exe extract_implications --json --finite-only --closure --only-implications > /tmp/raw_data/finite_implications_closure.json
+          ~/.elan/bin/lake exe extract_implications raw --full-entries --finite-only > /tmp/raw_data/finite_raw_full_entries.json
+          ~/.elan/bin/lake exe extract_implications outcomes --finite-only > /tmp/raw_data/finite_outcomes.json
+
+      - name: Generate compressed home_page/raw_data files
+        if: github.event_name == 'push'
+        run: |
+          mkdir home_page/raw_data
+          gzip -k /tmp/raw_data/*.json
+          mv /tmp/raw_data/*.gz home_page/raw_data
+
+      - name: Generate home_page/dashboard.md
+        run: |
+          pip install pillow
+          ruby scripts/generate_dashboard_graph_info.rb > /tmp/graph_info.md
+          python scripts/generate_dashboard.py /tmp/graph_info.md
+          python scripts/outcomes_to_image.py /tmp/raw_data/general_outcomes.json --out home_page/dashboard/outcomes.png
+
+      - name: Generate equation explorer data
+        run: |
+          pip install markdown
+          python scripts/generate_equation_implication_js.py > home_page/implications/implications.js
+          python scripts/generate_equation_explorer_graph.py /tmp/raw_data/general_outcomes.json /tmp/raw_data/general_raw_full_entries.json > home_page/implications/graph.json
+          python scripts/generate_equation_explorer_graph.py /tmp/raw_data/finite_outcomes.json /tmp/raw_data/finite_raw_full_entries.json > home_page/implications/finite_graph.json
+
+      - name: Generate the Finite Magma Explorer website
+        run: |
+          mkdir -p home_page/fme
+          cp -r tools/fme/dist/* home_page/fme
+          ~/.elan/bin/lake exe extract_implications unknowns --finite-only > home_page/fme/unknowns.json
+          COMMIT_HASH=$(git rev-parse --short HEAD)
+          sed -i "s/UNKNOWN_VERSION/$COMMIT_HASH/g" home_page/fme/index.html
+
+      - name: Generate home_page/graphiti/graph.json
+        run: |
+          ~/.elan/bin/lake exe extract_implications unknowns > /tmp/unknowns.json
+          ~/.elan/bin/lake exe extract_implications unknowns --finite-only > /tmp/unknowns.fin.json
+          ruby scripts/generate_graphiti_data.rb data/duals.json /tmp/raw_data/general_implications_closure.json /tmp/unknowns.json /tmp/raw_data/finite_implications_closure.json /tmp/unknowns.fin.json > home_page/graphiti/graph.json
+
+      - name: Generate the paper PDF (+ add it to the site)
+        uses: xu-cheng/texlive-action@8268537fedf1198f3ed7000c544bfdbddcbae3b7 # v3
+        with:
+          docker_image: ghcr.io/xu-cheng/texlive-full:20251002
+          run: |
+            cd paper
+            latexmk -pdf main.tex
+            latexmk -c
+            cd ..
+            cp paper/main.pdf home_page/paper.pdf
+
+      - name: Build project documentation.
+        id: build-docgen
+        uses: leanprover-community/docgen-action@deed0cdc44dd8e5de07a300773eb751d33e32fc8 # 2025-10-26
+        with:
+          blueprint: true
+          homepage: home_page
+
+      - name: Remove 'awaiting-CI' label
+        if: >
+          always() &&
+          github.event_name == 'pull_request'
+        run: |
+          curl --request DELETE \
+            --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels/awaiting-CI \
+            --header 'authorization: Bearer ${{ secrets.PAT_TOKEN }}' \
+            --header 'Content-Type: application/json'

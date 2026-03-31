@@ -1,0 +1,39 @@
+name = "equational_theories"
+defaultTargets = ["equational_theories"]
+
+[leanOptions]
+pp.unicode.fun = true
+autoImplicit = false
+relaxedAutoImplicit = false
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4.git"
+rev = "v4.20.0"
+
+[[require]]
+name = "checkdecls"
+git = "https://github.com/PatrickMassot/checkdecls.git"
+
+[[require]]
+name = "«doc-gen4»"
+git = "https://github.com/leanprover/doc-gen4"
+rev = "v4.20.0"
+
+[[lean_lib]]
+name = "equational_theories"
+
+[[lean_exe]]
+name = "extract_implications"
+root = "scripts.extract_implications"
+supportInterpreter = true
+
+[[lean_exe]]
+name = "export_equations"
+root = "scripts.export_equations"
+supportInterpreter = true
+
+[[lean_exe]]
+name = "generate_lifting_magma_family_counterexamples"
+root = "equational_theories.LiftingMagmaFamiliesCounterexamples"
+supportInterpreter = true
