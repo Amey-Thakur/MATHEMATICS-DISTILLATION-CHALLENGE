@@ -1,4 +1,4 @@
-# SAIR Mathematics Distillation: Project Index
+# SAIR Mathematics Distillation Challenge - Equational Theories
 
 **Prepared by**: Amey Thakur
 
