@@ -28,6 +28,10 @@ Raw source data and external dependencies.
 *   `equational-theories-selected-problems/`: SAIR problem subsets.
 *   `equational-theories-benchmark/`: Model run benchmarks.
 
+### Project Metadata
+*   [**codemeta.json**](codemeta.json): Machine-readable metadata (JSON-LD) for citation and indexing.
+*   [**LICENSE**](LICENSE): Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International.
+
 ---
 
 **Prepared by**: Amey Thakur
