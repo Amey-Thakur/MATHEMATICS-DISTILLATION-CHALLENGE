@@ -1,0 +1,23 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "license": "https://spdx.org/licenses/CC-BY-NC-SA-4.0.html",
+  "name": "SAIR Mathematics Distillation Challenge",
+  "version": "1.0.0",
+  "runtimePlatform": "Lean 4, Python 3.12",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Amey",
+      "familyName": "Thakur",
+      "id": "https://orcid.org/0000-0001-5644-1575"
+    }
+  ],
+  "description": "Formalizing and distilling magma equational theories for AI reasoning benchmarks. A comprehensive research repository for the SAIR foundation challenge, targeting high-density logic cliques and 'Master Law' identification.",
+  "programmingLanguage": [
+    "Lean 4",
+    "Python",
+    "JSONL",
+    "Markdown"
+  ]
+}
