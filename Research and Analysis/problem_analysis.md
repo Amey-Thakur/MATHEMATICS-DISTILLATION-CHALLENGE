@@ -1,4 +1,5 @@
 # Stage 1 Problem Subset Analysis: SAIR Challenge
+
 **Prepared by**: Amey Thakur
 
 This document audits the 1,669 public problems released for Stage 1 of the SAIR Mathematics Distillation Challenge.

@@ -1,4 +1,5 @@
 # SAIR Mathematics Distillation Challenge: Equational Theories
+
 **Prepared by**: Amey Thakur
 
 This document details the SAIR foundation challenge for distilling magma equational reasoning. The goal is to improve LLM performance on formal equational implication tasks using human-readable cheatsheets.
