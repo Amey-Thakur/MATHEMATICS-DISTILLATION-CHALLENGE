@@ -1,4 +1,5 @@
 # SAIR Mathematics Distillation: Project Index
+
 **Prepared by**: Amey Thakur
 
 All research, analysis, and submission artifacts for the SAIR foundation challenge.
@@ -28,5 +29,7 @@ Raw source data and external dependencies.
 *   `equational-theories-benchmark/`: Model run benchmarks.
 
 ---
+
 **Prepared by**: Amey Thakur
+
 **Status**: Stage 1 Ready
