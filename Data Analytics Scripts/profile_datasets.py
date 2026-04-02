@@ -35,7 +35,9 @@ def profile_jsonl(filepath):
     avg_vars = sum(var_counts) / len(var_counts) if var_counts else 0
     return {"avg_depth": round(avg_depth, 2), "avg_vars": round(avg_vars, 2), "total": total}
 
-base_path = r"C:\Users\AMEY THAKUR\Downloads\SAIR\equational-theories-selected-problems\data"
+# Dynamic Path Resolution for Portability
+script_dir = os.path.dirname(os.path.abspath(__file__))
+base_path = os.path.join(script_dir, "..", "Source Repositories", "equational-theories-selected-problems", "data")
 subsets = ["normal.jsonl", "hard1.jsonl", "hard2.jsonl", "hard3.jsonl"]
 
 print("SAIR Dataset Complexity Profile:")
