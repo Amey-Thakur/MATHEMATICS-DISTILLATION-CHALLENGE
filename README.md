@@ -22,11 +22,4 @@ Stage 2 transitions into automated theorem proving, counterexample generation, a
 *   **[research.md](./stage2/research.md)**: Research report detailing judge interaction, Lean verification, and budget optimization.
 *   *Other directories in `stage2/` (e.g., `solver/`, `lean/`, `judge/`) are placeholders for active development.*
 
-## Contributing
-All modifications should be committed with the exact message `SAIR`. Ensure that you understand the architectural distinction between Stage 1 and Stage 2 before contributing.
 
-## Future Plans
-Stage 2 development will prioritize highly optimized finite magma search algorithms (deterministic approach) integrated with LLM-based Lean 4 proof generation.
-
----
-**Status**: Stage 2 Research Phase
