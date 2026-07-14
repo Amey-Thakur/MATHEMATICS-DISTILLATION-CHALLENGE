@@ -1,1 +1,0 @@
-This law implies [law 8](https://teorth.github.io/equational_theories/implications/?8) `x◇(x◇x)=x`.  This law cannot hold in a (non-trivial) commutative magma or quasigroup.  This law together with associativity is equivalent to the [left-projection law 4](https://teorth.github.io/equational_theories/implications/?4).

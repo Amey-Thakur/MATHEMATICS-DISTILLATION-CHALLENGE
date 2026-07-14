@@ -1,0 +1,26 @@
+model_id,model_id_raw,display_name,provider,family,track,present_in_current_benchmark,mapping_status,notes
+anthropic/claude-opus-4.6,anthropic/claude-opus-4.6,Claude Opus 4.6,anthropic,claude,primary,true,exact,
+anthropic/claude-sonnet-4.6,anthropic/claude-sonnet-4.6,Claude Sonnet 4.6,anthropic,claude,primary,true,exact,
+anthropic/claude-haiku-4.5,anthropic/claude-haiku-4.5,Claude Haiku 4.5,anthropic,claude,primary,true,exact,
+google/gemini-3.1-pro-preview,google/gemini-3.1-pro-preview,Gemini 3.1 Pro Preview,google,gemini,primary,true,exact,
+google/gemini-3-flash-preview,google/gemini-3-flash-preview@owen-openrouter,Gemini 3 Flash Preview,google,gemini,primary,true,provider_suffix_removed,Raw file includes @owen-openrouter suffix
+google/gemini-3.1-flash-lite-preview,google/gemini-3.1-flash-lite-preview,Gemini 3.1 Flash Lite Preview,google,gemini,primary,true,exact,
+openai/gpt-5.4,openai/gpt-5.4,GPT-5.4,openai,gpt,primary,true,exact,
+openai/gpt-5-mini,openai/gpt-5-mini,GPT-5 Mini,openai,gpt,primary,true,exact,
+openai/gpt-5-nano,openai/gpt-5-nano,GPT-5 Nano,openai,gpt,primary,true,exact,
+openai/gpt-oss-120b,openai/gpt-oss-120b,GPT-OSS 120B,openai,gpt,primary,true,exact,
+x-ai/grok-4.1-fast,x-ai/grok-4.1-fast@owen-openrouter,Grok 4.1 Fast,x-ai,grok,primary,true,provider_suffix_removed,Raw file includes @owen-openrouter suffix
+x-ai/grok-code-fast-1,x-ai/grok-code-fast-1,Grok Code Fast 1,x-ai,grok,primary,true,exact,
+moonshotai/kimi-k2.5,moonshotai/kimi-k2.5,Kimi K2.5,moonshotai,kimi,primary,true,exact,
+minimax/minimax-m2.5,minimax/minimax-m2.5,MiniMax M2.5,minimax,minimax,primary,true,exact,
+z-ai/glm-5,z-ai/glm-5,GLM-5,z-ai,glm,primary,true,exact,
+stepfun/step-3.5-flash,stepfun/step-3.5-flash,Step 3.5 Flash,stepfun,step,primary,true,exact,
+deepseek/deepseek-v3.2,deepseek/deepseek-chat,DeepSeek V3.2,deepseek,deepseek,primary,true,alias_needs_confirmation,Raw file uses deepseek-chat and this mapping should be confirmed
+bytedance-seed/seed-2.0-lite,bytedance-seed/seed-2.0-lite,Seed 2.0 Lite,bytedance-seed,seed,primary,true,exact,
+qwen/qwen3.5-397b-a17b,qwen/qwen3.5-397b-a17b@owen-openrouter,Qwen 3.5 397B A17B,qwen,qwen,primary,true,provider_suffix_removed,Raw file includes @owen-openrouter suffix
+qwen/qwen3.5-122b-a10b,qwen/qwen3.5-122b-a10b,Qwen 3.5 122B A10B,qwen,qwen,primary,true,exact,
+qwen/qwen3.5-27b,qwen/qwen3.5-27b,Qwen 3.5 27B,qwen,qwen,primary,true,exact,
+meta-llama/llama-3.1-8b-instruct,meta-llama/llama-3.1-8b-instruct,Llama 3.1 8B Instruct,meta-llama,llama,primary,true,exact,
+meta-llama/llama-3.3-70b-instruct,meta-llama/llama-3.3-70b-instruct,Llama 3.3 70B Instruct,meta-llama,llama,primary,true,exact,
+meta-llama/llama-4-maverick,meta-llama/llama-4-maverick,Llama 4 Maverick,meta-llama,llama,primary,true,exact,
+mistralai/mistral-large-2512,mistralai/mistral-large-2512,Mistral Large 2512,mistralai,mistral,primary,true,exact,

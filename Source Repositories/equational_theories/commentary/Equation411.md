@@ -1,1 +1,0 @@
-The law constrains each left-multiplication map independently: left multiplication by `x` either maps `x` to itself, or maps `x↦y↦x` with `x≠y`, or maps `x↦y↦z↦w↦x` where `x,y,z,w` are pairwise distinct.

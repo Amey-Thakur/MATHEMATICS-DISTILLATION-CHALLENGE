@@ -1,35 +1,32 @@
-# SAIR Mathematics Distillation Challenge - Equational Theories
+# SAIR Mathematics Distillation Challenge
 
 **Prepared by**: Amey Thakur
 
-All research, analysis, and submission artifacts for the SAIR foundation challenge.
+Welcome to the long-term research repository for the SAIR Mathematics Distillation Challenge. This repository contains all research, analysis, source codes, and submission artifacts for both Stage 1 and Stage 2 of the competition.
 
-## Repository Structure
+## Repository Architecture
 
-### [Research and Analysis](Research%20and%20Analysis/)
-Technical foundational research.
-*   [**research.md**](Research%20and%20Analysis/research.md): Technical analysis of magma theories and model bottlenecks.
-*   [**problem_analysis.md**](Research%20and%20Analysis/problem_analysis.md): Audit of Stage 1 problem subsets.
-*   [**competition_overview.md**](Research%20and%20Analysis/competition_overview.md): Rules, benchmarks, and submission requirements.
+The repository is structured to separate the completed Phase 1 work from ongoing Phase 2 research.
 
-### [Submission Artifacts](Submission%20Artifacts/)
-Submission tools and prompt templates.
-*   [**magma_cheatsheet.md**](Submission%20Artifacts/magma_cheatsheet.md): Optimized 10 KB cheatsheet (~8.2 KB).
-*   [**complete_prompt.template**](Submission%20Artifacts/complete_prompt.template): Canonical prompt template for Stage 1.
+### [Stage 1: Knowledge Distillation](./stage1/)
+Stage 1 focused on human-readable heuristics, prompt engineering, and producing concise cheatsheets.
+*   **[prompts/](./stage1/prompts/)**: Canonical prompt templates for Stage 1.
+*   **[cheatsheets/](./stage1/cheatsheets/)**: Distilled knowledge artifacts (e.g., magma cheatsheet).
+*   **[analysis/](./stage1/analysis/)**: Technical analysis of magma theories and problem subsets.
+*   **[scripts/](./stage1/scripts/)**: Python tools for data profiling and analytics.
+*   **[sources/](./stage1/sources/)**: Raw source data and external dependencies (including Lean 4 source repos).
 
-### [Data Analytics Scripts](Data%20Analytics%20Scripts/)
-Python tools for structural analysis.
-*   `profile_datasets.py`: Complexity profiling script.
-*   `process_runs.py`: Model performance mining script.
+### [Stage 2: Formal Verification & Deterministic Solvers](./stage2/)
+Stage 2 transitions into automated theorem proving, counterexample generation, and Lean 4 verification.
+*   **[architecture.md](./stage2/architecture.md)**: System architecture for the solver.
+*   **[research.md](./stage2/research.md)**: Research report detailing judge interaction, Lean verification, and budget optimization.
+*   *Other directories in `stage2/` (e.g., `solver/`, `lean/`, `judge/`) are placeholders for active development.*
 
-### [Source Repositories](Source%20Repositories/)
-Raw source data and external dependencies.
-*   `equational_theories/`: Lean 4 project by Terence Tao.
-*   `equational-theories-selected-problems/`: SAIR problem subsets.
-*   `equational-theories-benchmark/`: Model run benchmarks.
+## Contributing
+All modifications should be committed with the exact message `SAIR`. Ensure that you understand the architectural distinction between Stage 1 and Stage 2 before contributing.
+
+## Future Plans
+Stage 2 development will prioritize highly optimized finite magma search algorithms (deterministic approach) integrated with LLM-based Lean 4 proof generation.
 
 ---
-
-**Prepared by**: Amey Thakur
-
-**Status**: Stage 1 Ready
+**Status**: Stage 2 Research Phase

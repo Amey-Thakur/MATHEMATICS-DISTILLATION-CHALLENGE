@@ -1,6 +1,0 @@
-import equational_theories.Generated.FinSearch.theorems.Refutation0
-import equational_theories.Generated.FinSearch.theorems.Refutation1
-import equational_theories.Generated.FinSearch.theorems.Refutation2
-import equational_theories.Generated.FinSearch.theorems.Refutation3
-import equational_theories.Generated.FinSearch.theorems.Refutation4
-import equational_theories.Generated.FinSearch.theorems.Refutation5
