@@ -42,10 +42,10 @@ Environment: No-tools (no internet access or external code execution)
 
 | Milestone | Date |
 | :--- | :--- |
-| Competition Commencement | March 14, 2026 |
+| Start | March 14, 2026 |
 | Stage 1 Submission Deadline | April 20, 2026 (23:59 AoE) |
-| Leaderboard Publication | April 30, 2026 |
-| Stage 2 Commencement | May 1, 2026 |
+| Leaderboard Release | April 30, 2026 |
+| Stage 2 Start | May 1, 2026 |
 
 ## Data Resources
 
@@ -63,7 +63,7 @@ The evaluation set maintains a 50% distribution of True and False implications.
 
 ## Evaluation Infrastructure
 
-Models utilized for benchmarking include:
+Models used for benchmarking:
 
 OpenAI OSS Models
 
