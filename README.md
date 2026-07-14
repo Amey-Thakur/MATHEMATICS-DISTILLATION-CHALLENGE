@@ -1,5 +1,7 @@
 # SAIR Mathematics Distillation Challenge
 
+![SAIR Mathematics Distillation Challenge Research Repository](./social_preview.png)
+
 **Prepared by**: Amey Thakur
 
 Welcome to the long-term research repository for the SAIR Mathematics Distillation Challenge. This repository contains all research, analysis, source codes, and submission artifacts for both Stage 1 and Stage 2 of the competition.

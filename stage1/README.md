@@ -1,5 +1,7 @@
 # Stage 1: Knowledge Distillation
 
+![Stage 1 Social Preview](./social_preview.png)
+
 All work from Stage 1 of the SAIR Mathematics Distillation Challenge is preserved here.
 
 ## What Stage 1 Was
