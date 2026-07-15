@@ -10,12 +10,7 @@ Stage 2 fundamentally changes the requirements from Stage 1. Instead of simply a
 ## Workspace Layout
 *   **`architecture.md`**: Defines the system architecture, specifically the hybrid LLM/Deterministic pipeline.
 *   **`research.md`**: Contains an in-depth analysis of the competition mechanics, evaluation judge, Lean 4 toolchains, and strategies.
-*   **`solver/`**: [Placeholder] Will contain the core Python orchestrator that manages the AST parsing and execution path.
-*   **`lean/`**: [Placeholder] Will contain Lean 4 environments, templates, and testing harnesses.
-*   **`proxy/`**: [Placeholder] Will contain the proxy server for routing and caching LLM requests (e.g., OpenRouter).
-*   **`judge/`**: [Placeholder] Will contain the local implementation of the SAIR deterministic judge for pre-submission validation.
-*   **`experiments/`**: [Placeholder] Will hold notebooks and scratchpads for prompt and algorithm experimentation.
-*   **`scripts/`**: [Placeholder] Utility scripts for building, testing, and interacting with the challenge API.
+*   **`solvers/`**: Contains the active production solvers (Gemma 4 31B and GPT OSS 120B) featuring Triage, AST Analysis, and SymPy SAT counterexample generation.
 
 ## Roadmap
 1. Establish local evaluation environment (Lean 4 and Judge).

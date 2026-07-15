@@ -22,6 +22,6 @@ Stage 1 focused on human-readable heuristics, prompt engineering, and producing 
 Stage 2 transitions into automated theorem proving, counterexample generation, and Lean 4 verification.
 *   **[architecture.md](./stage2/architecture.md)**: System architecture for the solver.
 *   **[research.md](./stage2/research.md)**: Research report detailing judge interaction, Lean verification, and budget optimization.
-*   *Other directories in `stage2/` (e.g., `solver/`, `lean/`, `judge/`) are placeholders for active development.*
+*   **[solvers/](./stage2/solvers/)**: Active production solvers featuring Triage, AST Analysis, and SymPy SAT counterexample generation.
 
 
