@@ -1,6 +1,6 @@
 # Stage 2: Formal Verification & Deterministic Solvers
 
-![Stage 2 Social Preview](./social_preview.png)
+![Stage 2 Social Preview](./social_preview.png?v=2)
 
 Welcome to the Stage 2 active research and development workspace for the SAIR Mathematics Distillation Challenge.
 

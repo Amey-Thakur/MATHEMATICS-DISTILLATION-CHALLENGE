@@ -1,6 +1,6 @@
 # SAIR Mathematics Distillation Challenge
 
-![SAIR Mathematics Distillation Challenge Research Repository](./social_preview.png)
+![SAIR Mathematics Distillation Challenge Research Repository](./social_preview.png?v=2)
 
 **Prepared by**: Amey Thakur
 
