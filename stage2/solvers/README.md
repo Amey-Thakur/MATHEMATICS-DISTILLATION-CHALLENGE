@@ -1,17 +1,18 @@
 <!--
   File: solvers/README.md
-  Purpose: Which solver to submit and why, plus how to test it locally.
+  Purpose: Which solver to submit, how it works, and how to test it locally.
 -->
 
 # Stage 2 solvers
 
-Three solvers live here. Submit one `solver.py` (Solo track, at most 500 KB).
+Submit one `solver.py` (at most 500 KB). Each track accepts up to two
+submissions, and either model may be chosen.
 
-| Solver | Approach | Recommended |
-|---|---|---|
-| [`hybrid/`](./hybrid/solver.py) | Deterministic first, model only as a last resort | Yes |
-| [`gpt_oss_120b/`](./gpt_oss_120b/solver.py) | Model-led (gpt-oss-120b) | Superseded |
-| [`gemma_4_31b/`](./gemma_4_31b/solver.py) | Model-led (gemma) | Superseded |
+| Solver | Approach | Tracks | Recommended |
+|---|---|---|---|
+| [`hybrid/`](./hybrid/solver.py) | Deterministic first, model only as a last resort | Solo and Marathon | Yes |
+| [`gpt_oss_120b/`](./gpt_oss_120b/solver.py) | Model-led (gpt-oss-120b) | Solo | Superseded |
+| [`gemma_4_31b/`](./gemma_4_31b/solver.py) | Model-led (gemma) | Solo | Superseded |
 
 ## Why hybrid
 
@@ -32,7 +33,20 @@ every deterministic answer is correct by construction:
    tokens are spent.
 3. **Model fallback** (a `true` verdict that needs a real proof). Only here
    does it call the model, with a structural prompt (the MATCH then COLLAPSE
-   method) and the judge's own error text fed back each round.
+   method). In Solo the judge error is fed back each round; in Marathon a
+   single guarded attempt is made per unsolved problem while the token
+   budget allows.
+
+On the official 20-problem sample, the deterministic stages alone answer 14,
+with no tokens and no incorrect certificates.
+
+## One file, both tracks
+
+The same `solver.py` runs on either track. It reads the environment: when
+`JUDGE_MARATHON_MANIFEST` is set it runs Marathon (manifest in, append-only
+JSONL out, shared token budget); otherwise it runs Solo (stdin and stdout
+JSON with interactive judge feedback). Deterministic answers cost no tokens,
+which is exactly what Marathon's compressed budget rewards.
 
 The Lean templates match the judge contract exactly:
 
@@ -41,21 +55,25 @@ true  : Goal = forall (G : Type) [Magma G], EquationLHS G -> EquationRHS G
 false : Goal = exists (G : Type) (_ : Magma G), EquationLHS G and not EquationRHS G
 ```
 
-A model-proposed counterexample is also re-verified in Python before it is
-trusted, so the solver never forwards an unchecked `false` certificate.
-
 ## Test it locally before submitting
 
-The Lean judge is what decides acceptance, so run the official harness (from
-the [Stage 2 repository](https://github.com/SAIRcompetition/equational-theories-lean-stage2))
-against this solver first:
+The Lean judge decides acceptance, so run the official harness (from the
+[Stage 2 repository](https://github.com/SAIRcompetition/equational-theories-lean-stage2))
+first.
 
 ```
 bash scripts/setup.sh            # one-time Lean and judge setup
 source .env.judge
+
+# Solo
 python3 -m pipeline.runner \
   --submission <path>/stage2/solvers/hybrid \
   --problems examples/problems/sample_20.json
+
+# Marathon
+python3 scripts/run_marathon_harness.py \
+  --submission <path>/stage2/solvers/hybrid \
+  --manifest examples/problems/marathon/normal_100.jsonl
 ```
 
 Read `pipeline/results/` and confirm the deterministic answers are accepted.
@@ -63,6 +81,6 @@ Submit only after the harness is clean.
 
 ## Submit
 
-Upload `hybrid/solver.py` on the competition page (Submit Solver, Solo track),
-or use the repository's `scripts/submit.py`. The submission is the single file;
+On the competition page choose the track and model, then upload
+`hybrid/solver.py` (Submit Solver). The submission is that single file;
 nothing else in the folder is sent.

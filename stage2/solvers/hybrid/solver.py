@@ -1,22 +1,28 @@
 """
-hybrid - Solo-track solver for the SAIR Equational Theories Stage 2 challenge.
+hybrid - dual-track solver for the SAIR Equational Theories Stage 2 challenge.
+
+One file, both tracks. It runs in Marathon when JUDGE_MARATHON_MANIFEST is set
+and in Solo otherwise, so the same submission can be entered on either track.
 
 Design principle: prove what can be proven deterministically, and only then
 ask the model. A finite magma counterexample is checked exhaustively in
-Python before it is emitted, so every `false` certificate this solver sends
-is correct by construction and the Lean judge's `decideFin!` only has to
-confirm it. That reliability is the whole point: model-written Lean proofs
-fail often, deterministic certificates do not.
+Python before it is emitted, so every `false` certificate is correct by
+construction and the Lean judge's `decideFin!` only confirms it. That
+reliability is the point: model-written Lean proofs fail often, deterministic
+certificates do not. This matters most in Marathon, where the judge gives no
+per-answer feedback, so a guessed proof cannot be retried.
 
-Order of attack:
+Order of attack (both tracks):
   1. Counterexample search on finite magmas (Fin 2, 3 exhaustive; Fin 4 by
-     constrained backtracking). Clears most `false` problems with no tokens.
+     constrained backtracking). Verified in Python. Clears most `false`
+     problems with no tokens.
   2. Collapse proof: if the hypothesis forces every element equal, any goal
      follows. Clears the degenerate `true` problems with no tokens.
-  3. Model fallback with a structural prompt and judge-error feedback, for
-     the `true` problems that need a real proof.
+  3. Model fallback for the `true` problems that need a real proof. In Solo
+     the judge error is fed back each round; in Marathon a single guarded
+     attempt is made per unsolved problem while the token budget allows.
 
-The Lean templates match the judge contract exactly:
+Lean templates match the judge contract exactly:
   true  : Goal = forall (G : Type) [Magma G], EquationLHS G -> EquationRHS G
   false : Goal = exists (G : Type) (_ : Magma G), EquationLHS G and not EquationRHS G
 """
@@ -52,42 +58,19 @@ or
 
 
 import json
+import os
 import re
 import sys
 import time
 from itertools import product
 
 
-# -- protocol --------------------------------------------------------------
-
-def read_message():
-    line = sys.stdin.readline()
-    if not line:
-        sys.exit(0)
-    return json.loads(line.strip())
-
-
-def send_message(msg):
-    print(json.dumps(msg), flush=True)
-
-
-def call_judge(verdict, code):
-    send_message({"call": "judge", "verdict": verdict, "code": code})
-    return read_message()
-
-
-def call_llm(context):
-    send_message({"call": "llm", "context": context})
-    return read_message()
+OP = "◇"  # the magma operator, U+25C7
 
 
 # -- equation parsing ------------------------------------------------------
 
-OP = "◇"  # the magma operator, U+25C7
-
-
 def parse_side(s, variables):
-    """Turn one side of an equation into a function env -> value."""
     s = s.strip()
     while len(s) >= 2 and s[0] == "(" and s[-1] == ")":
         depth = 0
@@ -107,7 +90,7 @@ def parse_side(s, variables):
     for i, c in enumerate(s):
         depth += (c == "(") - (c == ")")
         if depth == 0 and c == OP:
-            split_at = i  # last top-level operator, left associative
+            split_at = i
     if split_at >= 0:
         left = parse_side(s[:split_at], variables)
         right = parse_side(s[split_at + 1:], variables)
@@ -128,7 +111,8 @@ def parse_equation(text):
     return variables, parse_side(lhs, seen), parse_side(rhs, seen)
 
 
-def holds(variables, lhs, rhs, n, op):
+def holds(triple, n, op):
+    variables, lhs, rhs = triple
     for vals in product(range(n), repeat=len(variables)):
         env = {"op": op}
         env.update(zip(variables, vals))
@@ -137,7 +121,8 @@ def holds(variables, lhs, rhs, n, op):
     return True
 
 
-def violated(variables, lhs, rhs, n, op):
+def violated(triple, n, op):
+    variables, lhs, rhs = triple
     for vals in product(range(n), repeat=len(variables)):
         env = {"op": op}
         env.update(zip(variables, vals))
@@ -150,11 +135,10 @@ def violated(variables, lhs, rhs, n, op):
 
 def _witness(eq1, eq2, n, table):
     op = lambda a, b, t=table: t[a][b]
-    return holds(*eq1, n, op) and violated(*eq2, n, op)
+    return holds(eq1, n, op) and violated(eq2, n, op)
 
 
 def search_exhaustive(eq1, eq2, n):
-    """Every operation table on Fin n. Only sane for n <= 3."""
     for enc in range(n ** (n * n)):
         table = [[(enc // n ** (i * n + j)) % n for j in range(n)] for i in range(n)]
         if _witness(eq1, eq2, n, table):
@@ -163,20 +147,13 @@ def search_exhaustive(eq1, eq2, n):
 
 
 def search_backtrack(eq1, eq2, n, deadline):
-    """Fill the n*n table cell by cell, pruning as soon as a fully assigned
-    hypothesis instance is violated. Returns a table satisfying the
-    hypothesis and violating the goal, or None."""
     variables, lhs, rhs = eq1
     cells = [(i, j) for i in range(n) for j in range(n)]
     table = [[None] * n for _ in range(n)]
 
-    def defined(a, b):
-        return table[a][b] is not None
-
     def eval_partial(fn, env):
-        # returns value or None if the expression touches an undefined cell
         def op(a, b):
-            if a is None or b is None or not defined(a, b):
+            if a is None or b is None or table[a][b] is None:
                 raise KeyError
             return table[a][b]
         env2 = dict(env)
@@ -189,8 +166,7 @@ def search_backtrack(eq1, eq2, n, deadline):
     def hyp_ok():
         for vals in product(range(n), repeat=len(variables)):
             env = dict(zip(variables, vals))
-            lv = eval_partial(lhs, env)
-            rv = eval_partial(rhs, env)
+            lv, rv = eval_partial(lhs, env), eval_partial(rhs, env)
             if lv is not None and rv is not None and lv != rv:
                 return False
         return True
@@ -199,9 +175,8 @@ def search_backtrack(eq1, eq2, n, deadline):
         if time.monotonic() > deadline:
             return None
         if k == len(cells):
-            if _witness(eq1, eq2, n, [row[:] for row in table]):
-                return [row[:] for row in table]
-            return None
+            full = [row[:] for row in table]
+            return full if _witness(eq1, eq2, n, full) else None
         i, j = cells[k]
         for v in range(n):
             table[i][j] = v
@@ -252,28 +227,6 @@ def make_true_code(proof_body):
 
 # -- deterministic collapse proof ------------------------------------------
 
-def collapse_proof(eq1_text, eq2_text):
-    """If the hypothesis has the form x = <expr in which x does not appear>,
-    then every two elements are equal and any goal follows. Returns a proof
-    body, or None when the pattern does not apply."""
-    lhs, rhs = (p.strip() for p in eq1_text.split("=", 1))
-    if lhs != "x":
-        return None
-    if "x" in set(re.findall(r"\b([a-z])\b", rhs)):
-        return None
-
-    eq1_vars = _ordered_vars(eq1_text)
-    eq2_vars = _ordered_vars(eq2_text)
-    filler = " ".join(["a"] * (len(eq1_vars) - 1))
-    g_lhs, g_rhs = (p.strip() for p in eq2_text.split("=", 1))
-    return (
-        f"intro {' '.join(eq2_vars)}\n"
-        f"have all_eq : ∀ (a b : G), a = b := "
-        f"fun a b => (h a {filler}).trans (h b {filler}).symm\n"
-        f"exact all_eq ({g_lhs}) ({g_rhs})"
-    )
-
-
 def _ordered_vars(text):
     seen, out = set(), []
     for v in re.findall(r"\b([a-z])\b", text):
@@ -283,24 +236,60 @@ def _ordered_vars(text):
     return out
 
 
+def collapse_proof(eq1_text, eq2_text):
+    """If the hypothesis has the form x = <expr without x>, every two elements
+    are equal and any goal follows. Returns a proof body, or None."""
+    lhs, rhs = (p.strip() for p in eq1_text.split("=", 1))
+    if lhs != "x" or "x" in set(re.findall(r"\b([a-z])\b", rhs)):
+        return None
+    filler = " ".join(["a"] * (len(_ordered_vars(eq1_text)) - 1))
+    g_lhs, g_rhs = (p.strip() for p in eq2_text.split("=", 1))
+    return (
+        f"intro {' '.join(_ordered_vars(eq2_text))}\n"
+        f"have all_eq : ∀ (a b : G), a = b := "
+        f"fun a b => (h a {filler}).trans (h b {filler}).symm\n"
+        f"exact all_eq ({g_lhs}) ({g_rhs})"
+    )
+
+
+# -- deterministic solve shared by both tracks -----------------------------
+
+def solve_deterministic(problem, budget_s):
+    """Return (verdict, code) if a deterministic certificate is found, else None."""
+    eq1 = parse_equation(problem["equation1"])
+    eq2 = parse_equation(problem["equation2"])
+    n, table = find_counterexample(eq1, eq2, budget_s)
+    if n is not None:
+        return "false", make_false_code(n, table)
+    body = collapse_proof(problem["equation1"], problem["equation2"])
+    if body is not None:
+        return "true", make_true_code(body)
+    return None
+
+
+def build_analysis(problem, solved_false):
+    notes = []
+    if not solved_false:
+        notes.append("No counterexample exists up to Fin 4, so this is almost certainly TRUE.")
+    if collapse_proof(problem["equation1"], problem["equation2"]):
+        notes.append("The hypothesis collapses every element to one value.")
+    return "Solver analysis: " + (" ".join(notes) if notes else "no deterministic shortcut found.")
+
+
 # -- model response parsing ------------------------------------------------
 
 def extract_json(text):
     text = re.sub(r"<think>[\s\S]*?</think>", "", text).strip()
     text = re.sub(r"^```(?:json)?\s*\n?", "", text)
     text = re.sub(r"\n?```\s*$", "", text)
-    for candidate in (text, _first_brace(text)):
+    m = re.search(r"\{[\s\S]*\}", text)
+    for candidate in (text, m.group() if m else None):
         if candidate:
             try:
                 return json.loads(candidate)
             except Exception:
                 pass
     return None
-
-
-def _first_brace(text):
-    m = re.search(r"\{[\s\S]*\}", text)
-    return m.group() if m else None
 
 
 def clean_proof_body(body):
@@ -311,60 +300,150 @@ def clean_proof_body(body):
     return body.strip()
 
 
-# -- main ------------------------------------------------------------------
+def code_from_answer(answer, eq1, eq2):
+    """Turn a parsed model answer into Lean code, or None if unusable."""
+    if answer.get("verdict") == "true":
+        proof = clean_proof_body(answer.get("proof", ""))
+        return make_true_code(proof) if proof else None
+    if answer.get("verdict") == "false":
+        tbl = answer.get("counterexample_table")
+        if isinstance(tbl, list) and tbl and _witness(eq1, eq2, len(tbl), tbl):
+            return make_false_code(len(tbl), tbl)
+    return None
 
-def build_analysis(eq1_text, eq2_text, no_ce):
-    notes = []
-    if no_ce:
-        notes.append("No counterexample exists up to Fin 4, so the implication is almost certainly TRUE.")
-    if collapse_proof(eq1_text, eq2_text):
-        notes.append("The hypothesis collapses every element to one value; a one-line all_eq proof works.")
-    return "Solver analysis: " + (" ".join(notes) if notes else "no deterministic shortcut found.")
+
+# -- Solo track (stdin/stdout, interactive judge) --------------------------
+
+def read_message():
+    line = sys.stdin.readline()
+    if not line:
+        sys.exit(0)
+    return json.loads(line.strip())
 
 
-def main():
-    startup = read_message()
-    problem = startup["problem"]
-    eq1_text, eq2_text = problem["equation1"], problem["equation2"]
-    eq1 = parse_equation(eq1_text)
-    eq2 = parse_equation(eq2_text)
+def send_message(msg):
+    print(json.dumps(msg), flush=True)
 
-    # Stage 1: deterministic counterexample (false).
-    n, table = find_counterexample(eq1, eq2, budget_s=25)
-    if n is not None and call_judge("false", make_false_code(n, table)).get("status") == "accepted":
-        return
 
-    # Stage 2: deterministic collapse proof (true).
-    body = collapse_proof(eq1_text, eq2_text)
-    if body and call_judge("true", make_true_code(body)).get("status") == "accepted":
-        return
+def run_solo():
+    problem = read_message()["problem"]
+    eq1 = parse_equation(problem["equation1"])
+    eq2 = parse_equation(problem["equation2"])
 
-    # Stage 3: model fallback with structural analysis and judge feedback.
-    analysis = build_analysis(eq1_text, eq2_text, no_ce=(n is None))
+    det = solve_deterministic(problem, budget_s=25)
+    solved_false = det is not None and det[0] == "false"
+    if det is not None:
+        send_message({"call": "judge", "verdict": det[0], "code": det[1]})
+        if read_message().get("status") == "accepted":
+            return
+
+    analysis = build_analysis(problem, solved_false)
     rnd = 0
     while True:
-        result = call_llm({"round": str(rnd), "analysis": analysis})
+        send_message({"call": "llm", "context": {"round": str(rnd), "analysis": analysis}})
         rnd += 1
+        result = read_message()
         if "error" in result:
             return
         answer = extract_json(result.get("response", ""))
-        if not answer or answer.get("verdict") not in ("true", "false"):
+        if not answer:
             continue
-        if answer["verdict"] == "true":
-            proof = clean_proof_body(answer.get("proof", ""))
-            if not proof:
-                continue
-            code = make_true_code(proof)
-        else:
-            tbl = answer.get("counterexample_table")
-            if not isinstance(tbl, list) or not tbl:
-                continue
-            # Only trust a model counterexample if it verifies in Python.
-            if not _witness(eq1, eq2, len(tbl), tbl):
-                continue
-            code = make_false_code(len(tbl), tbl)
-        if call_judge(answer["verdict"], code).get("status") == "accepted":
+        code = code_from_answer(answer, eq1, eq2)
+        if code is None:
+            continue
+        send_message({"call": "judge", "verdict": answer["verdict"], "code": code})
+        if read_message().get("status") == "accepted":
             return
+
+
+# -- Marathon track (manifest in, append-only JSONL out) -------------------
+
+def append_answer(path, entry):
+    with open(path, "a", encoding="utf-8") as fh:
+        fh.write(json.dumps(entry, ensure_ascii=False) + "\n")
+        fh.flush()
+        try:
+            os.fsync(fh.fileno())
+        except OSError:
+            pass
+
+
+def marathon_prompt(problem, analysis):
+    filled = PROMPT
+    for key, val in {
+        "{problem.equation1_id}": f"Equation{problem.get('eq1_id', '')}",
+        "{problem.equation2_id}": f"Equation{problem.get('eq2_id', '')}",
+        "{problem.equation1}": problem["equation1"],
+        "{problem.equation2}": problem["equation2"],
+        "{solver.analysis}": analysis,
+        "{history.attempts}": "none",
+    }.items():
+        filled = filled.replace(key, val)
+    return filled
+
+
+def run_marathon():
+    manifest = os.environ["JUDGE_MARATHON_MANIFEST"]
+    output = os.environ["JUDGE_MARATHON_OUTPUT"]
+    budget_s = float(os.environ.get("JUDGE_MARATHON_BUDGET_SECONDS", "3600"))
+    deadline = time.monotonic() + budget_s
+    tail = 10.0
+
+    problems = []
+    with open(manifest, encoding="utf-8") as fh:
+        for raw in fh:
+            raw = raw.strip()
+            if raw:
+                try:
+                    problems.append(json.loads(raw))
+                except json.JSONDecodeError:
+                    continue
+
+    # Phase 1: deterministic certificates for every problem (no tokens).
+    per_problem = max(2.0, (budget_s * 0.4) / max(1, len(problems)))
+    unsolved = []
+    for prob in problems:
+        if time.monotonic() + tail >= deadline:
+            break
+        try:
+            det = solve_deterministic(prob, budget_s=per_problem)
+        except Exception:
+            det = None
+        if det is not None:
+            append_answer(output, {"id": prob["id"], "verdict": det[0], "code": det[1]})
+        else:
+            unsolved.append(prob)
+
+    # Phase 2: one guarded model attempt per unsolved problem, budget allowing.
+    try:
+        from marathon_llm import call_llm, budget_remaining
+    except Exception:
+        return
+
+    for prob in unsolved:
+        if time.monotonic() + tail >= deadline or budget_remaining() < 20000:
+            break
+        try:
+            eq1 = parse_equation(prob["equation1"])
+            eq2 = parse_equation(prob["equation2"])
+            result = call_llm(marathon_prompt(prob, build_analysis(prob, False)))
+            if "error" in result:
+                break
+            answer = extract_json(result.get("response", ""))
+            if not answer:
+                continue
+            code = code_from_answer(answer, eq1, eq2)
+            if code is not None:
+                append_answer(output, {"id": prob["id"], "verdict": answer["verdict"], "code": code})
+        except Exception:
+            continue
+
+
+def main():
+    if "JUDGE_MARATHON_MANIFEST" in os.environ:
+        run_marathon()
+    else:
+        run_solo()
 
 
 if __name__ == "__main__":
