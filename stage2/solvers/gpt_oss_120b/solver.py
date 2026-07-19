@@ -90,7 +90,7 @@ def ultimate_main():
 
 
 """
-opnorm — flagship reference mining solver (Solo track).
+opnorm - flagship reference mining solver (Solo track).
 
 Strategy: 16 deterministic proof strategies (counterexample search on
 Fin 2-7, singleton detection, library lookup, constancy lemmas, BFS
@@ -129,13 +129,13 @@ Goal ({problem.equation2_id}): ∀ vars, {solver.goal_text}
 3. NEVER use `_` as a type in `have`. Always write the full type.
 4. NEVER use: sorry, admit, aesop, omega, decide, tauto, linarith, simp (any form)
 5. Use ONLY: intro, exact, calc, have, congr_arg, .symm, .trans
-6. MAGMA OPERATOR IS `◇` (U+25C7), NOT `*`. Write every operator as `◇`. If you see `*` anywhere in the problem statement, treat it as `◇` — the equations are equivalent, it is only a display convention. Proofs containing `*` will FAIL to compile with `failed to synthesize HMul`.
+6. MAGMA OPERATOR IS `◇` (U+25C7), NOT `*`. Write every operator as `◇`. If you see `*` anywhere in the problem statement, treat it as `◇` - the equations are equivalent, it is only a display convention. Proofs containing `*` will FAIL to compile with `failed to synthesize HMul`.
 
 ## The MATCH-COLLAPSE proof method
 
 Almost all these proofs follow a 2-step pattern:
 
-### Step 1: MATCH — use h with compound args to match goal's outer structure
+### Step 1: MATCH - use h with compound args to match goal's outer structure
 
 h: {problem.equation1}
 
@@ -143,7 +143,7 @@ To match the goal, substitute COMPOUND terms into h's non-free variables so the 
 
 Example: If goal has `(x ◇ y) ◇ something` on RHS, and h's RHS has `y_var ◇ something`, set `y_var = (x ◇ y)`.
 
-### Step 2: COLLAPSE — use constancy to simplify inner junk
+### Step 2: COLLAPSE - use constancy to simplify inner junk
 
 After Step 1, h produces `goal_outer ◇ (junk)`. You need `junk = goal_inner`.
 
@@ -541,7 +541,7 @@ def backtrack_counterexample(eq1_text, eq2_text, sizes=(4, 5), time_limit=10):
 
             if eq1_ok:
                 if cell_idx == nc - 1:
-                    # Complete table — check eq2 violated
+                    # Complete table - check eq2 violated
                     eq2_ok = check_equation(v2, l2, r2, n, lambda a, b, t=table: t[a][b])
                     if not eq2_ok:
                         return n, [row[:] for row in table]
@@ -727,7 +727,7 @@ def try_symm_repair(proof_body, error_msg):
             if new_proof != proof_body:
                 candidates.append(new_proof)
 
-    # Return the first candidate (simple heuristic — just try one repair)
+    # Return the first candidate (simple heuristic - just try one repair)
     return candidates[0] if candidates else None
 
 
@@ -766,7 +766,7 @@ def preflight_proof(proof_body):
         }
 
     # 4. Check for banned automation tactics (at tactic position: start of line)
-    # Note: 'simp only [...]' is ALLOWED — only bare 'simp' without 'only' is banned
+    # Note: 'simp only [...]' is ALLOWED - only bare 'simp' without 'only' is banned
     BANNED_AUTO = [
         'aesop', 'omega', 'norm_num', 'ring', 'field_simp',
         'decide', 'tauto', 'linarith', 'positivity', 'polyrith', 'nlinarith',
@@ -823,7 +823,7 @@ def parse_lean_error(stderr_text):
     expected = ""
     got = ""
 
-    # Check for decideFin!/decide failure — means the table doesn't satisfy the equation
+    # Check for decideFin!/decide failure - means the table doesn't satisfy the equation
     if "application type mismatch" in stderr_text and "of_decide_eq_true" in stderr_text:
         # Extract which equation failed
         eq_match = re.search(r'decide \((\w+) \(Fin (\d+)\)\)', stderr_text)
@@ -1332,7 +1332,7 @@ def deep_proof_analysis(eq1_text, eq2_text):
                 f"CONSTANCY: Variables {rhs_only} appear ONLY on the RHS of h. "
                 f"For FIXED {both_sides}, the RHS is constant regardless of {rhs_only}. "
                 f"So h(same_x, y1, z1) and h(same_x, y2, z2) give the same LHS. "
-                f"WARNING: The RHS still DEPENDS on {both_sides} — different {both_sides} values "
+                f"WARNING: The RHS still DEPENDS on {both_sides} - different {both_sides} values "
                 f"give DIFFERENT results. Do NOT claim all elements are equal unless you can prove it."
             )
         else:
@@ -1702,7 +1702,7 @@ def compute_match_collapse_hints(eq1_text, eq2_text):
         hints.append(f"  Since {', '.join(sorted(lhs_free))} are free, the LHS side has constancy.")
         hints.append(f"  Use (h {' '.join(['a']*len(lhs_free))} b).trans (h {' '.join(['c']*len(lhs_free))} b).symm")
     else:
-        hints.append(f"  No free variables — use compound instantiation of h to bridge gap.")
+        hints.append(f"  No free variables - use compound instantiation of h to bridge gap.")
 
     return "\n".join(hints)
 
@@ -2053,7 +2053,7 @@ def generate_proof_template(eq1_text, eq2_text):
         lines.append("For step 2, hc proves the middle transition because it keeps the anchored")
         lines.append("variable fixed while changing the free variables.")
     else:
-        # No common factor — different patterns
+        # No common factor - different patterns
         if h_lhs == 'x' and g_lhs == 'x':
             lines.append("## Proof pattern (direct h + constancy)")
             lines.append("h and goal both have LHS = x.")
@@ -2061,7 +2061,7 @@ def generate_proof_template(eq1_text, eq2_text):
             lines.append("")
 
             # Check if hc can directly bridge the gap
-            # h_rhs has free vars — can we set them to get goal_rhs?
+            # h_rhs has free vars - can we set them to get goal_rhs?
             lines.append("h gives: x = %s" % h_rhs)
             lines.append("Goal needs: x = %s" % g_rhs)
             lines.append("")
@@ -2337,7 +2337,7 @@ def try_direct_proof(problem, eq1_text, eq2_text):
 
 
 def try_library_proof(problem):
-    """Stage 2 judge is self-contained — the equational_theories library that
+    """Stage 2 judge is self-contained - the equational_theories library that
     backed this shortcut is no longer linked. Return False so the caller
     falls through to the LLM path without paying a guaranteed-failing Lean
     round-trip."""
@@ -2403,7 +2403,7 @@ def _find_transitive_path(src_num, tgt_num, max_depth=6):
 
 
 def try_transitive_library_proof(problem, max_judge_calls=2):
-    """Stage 2 judge is self-contained — the equational_theories library the
+    """Stage 2 judge is self-contained - the equational_theories library the
     transitive chain composes against is no longer linked. Skip the whole
     path; no point constructing a proof whose `import` lines cannot resolve."""
     return False
@@ -2414,7 +2414,7 @@ def try_transitive_library_proof(problem, max_judge_calls=2):
 
     path = _find_transitive_path(src_num, tgt_num)
     if not path or len(path) < 3:
-        # Direct or no path — skip (direct already handled by try_library_proof)
+        # Direct or no path - skip (direct already handled by try_library_proof)
         return False
 
     # Build the Lean proof: compose the intermediate implications
@@ -2479,7 +2479,7 @@ def try_transitive_library_proof(problem, max_judge_calls=2):
 # ── Advanced proof strategies ───────────────────────────────────
 
 def _detect_free_positions(eq_text, eq_vars):
-    """Detect which variable positions in the hypothesis are 'free' — i.e.,
+    """Detect which variable positions in the hypothesis are 'free' - i.e.,
     the output is independent of that variable's value.
     Returns list of (position_index, variable_name) that are free on LHS or RHS."""
     parts = eq_text.split('=', 1)
@@ -2630,7 +2630,7 @@ def try_calc_chain_proof(problem, eq1_text, eq2_text, max_depth=5):
 
                     # If the _ = _ style doesn't work, try with explicit terms
                     # (Lean may need help inferring the intermediate terms)
-                    # Skip for now — will be handled by LLM if this fails
+                    # Skip for now - will be handled by LLM if this fails
 
                 next_frontier.append(target)
         frontier = next_frontier
@@ -2673,8 +2673,8 @@ def try_compound_calc_proof(problem, eq1_text, eq2_text, max_judge_calls=3):
 
     # Build instantiations by iterating combos ordered by number of compound terms.
     # k=0: all bare (already handled by try_calc_chain_proof, skip)
-    # k=1: exactly one compound argument position — n_h * n_c * n_b^(n_h-1)
-    # k=2: exactly two compound positions — C(n_h,2) * n_c^2 * n_b^(n_h-2)
+    # k=1: exactly one compound argument position - n_h * n_c * n_b^(n_h-1)
+    # k=2: exactly two compound positions - C(n_h,2) * n_c^2 * n_b^(n_h-2)
     all_insts = {}
 
     def _add_combo(combo):
@@ -2781,7 +2781,7 @@ def try_rw_chain_proof(problem, eq1_text, eq2_text, max_judge_calls=6):
     eq2_lhs = parts2[0].strip()
     eq2_rhs = parts2[1].strip()
 
-    # Collect candidate combos — prioritize by structural relevance
+    # Collect candidate combos - prioritize by structural relevance
     scored_combos = []
     for combo in product(eq2_vars, repeat=len(eq1_vars)):
         new_lhs = simultaneous_subst(eq1_lhs, eq1_vars, combo)
@@ -2959,7 +2959,7 @@ def _build_bridge_proofs(eq1_vars, goal_vars, intro):
 
 def try_simp_proof(problem, eq1_text, eq2_text, max_judge_calls=2):
     """Try proofs using simp only [h] and simp only [← h].
-    This is a powerful general strategy — Lean's simplifier can often
+    This is a powerful general strategy - Lean's simplifier can often
     close goals that involve repeated application of the hypothesis.
     Returns True if accepted, False otherwise. Uses 0 LLM calls."""
     eq2_vars = parse_variables(eq2_text)
@@ -3703,7 +3703,7 @@ def try_simp_rewrite_proof(problem, eq1_text, eq2_text, max_judge_calls=8):
 
     proofs = []
 
-    # Strategy 1: simp [← h, hc] — backward collapse + constancy
+    # Strategy 1: simp [← h, hc] - backward collapse + constancy
     # ← h: F(x,y,z) → x (collapse pattern to core var)
     # hc: equate different free var instantiations
     simp_bwd = ", ".join(["← h"] + ci_names)
@@ -4421,7 +4421,7 @@ def try_hybrid_calc_proof(problem, eq1_text, eq2_text, max_judge_calls=4):
 
 def _denormalize(norm_expr, eq2_vars):
     """Convert a normalized (no-space) expression back to readable form.
-    This is approximate — adds spaces around ◇ operators."""
+    This is approximate - adds spaces around ◇ operators."""
     # Simply add spaces around ◇
     result = norm_expr.replace('\u25c7', ' \u25c7 ')
     # Verify it parses
@@ -4437,7 +4437,7 @@ def build_fix_hint(error_info, verdict):
     """Generate a concrete fix hint from parsed error."""
     etype = error_info["type"]
 
-    # Pre-flight errors — very specific
+    # Pre-flight errors - very specific
     if etype.startswith("preflight_"):
         return error_info.get("detail", "Pre-flight check failed.")
 
@@ -4453,7 +4453,7 @@ def build_fix_hint(error_info, verdict):
             exp = error_info['expected']
             got = error_info['got']
             return (f"Type mismatch: proof gives `{got}` but needs `{exp}`. "
-                    "This means a calc step is WRONG — the h-instantiation doesn't produce the equality you think. "
+                    "This means a calc step is WRONG - the h-instantiation doesn't produce the equality you think. "
                     "Check: what does `h <your_args>` actually equal? Write it out manually before using it.")
         return ("Type mismatch. Your constancy lemma or calc step has the wrong type. "
                 "Write out what `h a b c` produces for your specific arguments and verify the equality manually.")
@@ -4476,7 +4476,7 @@ def build_fix_hint(error_info, verdict):
                 "different intermediate expressions, different h-instantiations, or add more steps.")
 
     if etype == "app_type_mismatch":
-        return ("Wrong number or type of arguments. Count the hypothesis variables — "
+        return ("Wrong number or type of arguments. Count the hypothesis variables - "
                 "h needs EXACTLY that many arguments. E.g., if h has x,y,z then `h a b c` (3 args).")
 
     if etype == "function_expected":
@@ -4487,7 +4487,7 @@ def build_fix_hint(error_info, verdict):
     if "sorry" in raw.lower():
         return "Proof contains sorry/admit which is BANNED."
     if "unsolved goals" in raw.lower():
-        return "Unsolved goals remain. Your approach may be fundamentally wrong — try a different strategy."
+        return "Unsolved goals remain. Your approach may be fundamentally wrong - try a different strategy."
     return f"Lean error: {raw[:300]}"
 
 
@@ -4602,7 +4602,7 @@ def original_main():
     seen_answers = set()
     false_attempts = 0
 
-    # No per-problem call cap — loop until wall-clock watchdog or LLM error.
+    # No per-problem call cap - loop until wall-clock watchdog or LLM error.
     rnd = -1
     while True:
         rnd += 1
@@ -4671,7 +4671,7 @@ def original_main():
             # Normalise the magma operator. LLM often emits `*` from the problem
             # text; Lean's Magma typeclass requires `◇`.
             proof = normalize_op_to_diamond(proof)
-            # Pre-flight validation — catch common LLM mistakes before using judge call
+            # Pre-flight validation - catch common LLM mistakes before using judge call
             proof, pf_error = preflight_proof(proof)
             if pf_error:
                 last_error_info = pf_error
