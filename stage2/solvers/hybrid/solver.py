@@ -59,6 +59,7 @@ or
 
 import json
 import os
+import random
 import re
 import sys
 import time
@@ -199,16 +200,60 @@ def search_backtrack(eq1, eq2, n, deadline):
     return recurse(0)
 
 
+def search_affine(eq1, eq2, max_n):
+    """Affine magmas a ◇ b = (p·a + q·b + s) mod n. The space is only n³ per
+    order, yet these linear models witness a large share of the known false
+    implications, reaching orders far beyond exhaustive table search."""
+    max_vars = max(len(eq1[0]), len(eq2[0]))
+    for n in range(2, max_n + 1):
+        if n ** max_vars > 300_000:
+            break
+        for p in range(n):
+            for q in range(n):
+                for s in range(n):
+                    op = lambda a, b, p=p, q=q, s=s, n=n: (p * a + q * b + s) % n
+                    if holds(eq1, n, op) and violated(eq2, n, op):
+                        table = [[op(a, b) for b in range(n)] for a in range(n)]
+                        return n, table
+    return None, None
+
+
+def search_random(eq1, eq2, n, deadline, samples):
+    """Random tables on Fin n with a cheap reject: most tables die on the
+    first hypothesis tuple checked, so millions of candidates are affordable."""
+    randint = random.randint
+    for _ in range(samples):
+        if time.monotonic() > deadline:
+            return None
+        table = [[randint(0, n - 1) for _ in range(n)] for _ in range(n)]
+        op = lambda a, b, t=table: t[a][b]
+        if holds(eq1, n, op) and violated(eq2, n, op):
+            return table
+    return None
+
+
 def find_counterexample(eq1, eq2, budget_s):
     deadline = time.monotonic() + budget_s
     for n in (2, 3):
         table = search_exhaustive(eq1, eq2, n)
         if table is not None:
             return n, table
+
+    n, table = search_affine(eq1, eq2, max_n=8)
+    if n is not None:
+        return n, table
+
     if time.monotonic() < deadline:
         table = search_backtrack(eq1, eq2, 4, deadline)
         if table is not None:
             return 4, table
+
+    for n in (5, 6):
+        if time.monotonic() >= deadline:
+            break
+        table = search_random(eq1, eq2, n, deadline, samples=400_000)
+        if table is not None:
+            return n, table
     return None, None
 
 
@@ -261,16 +306,180 @@ def collapse_proof(eq1_text, eq2_text):
     )
 
 
+# -- rewrite prover for true implications ----------------------------------
+#
+# Simulates Lean's rw tactic exactly: instantiating the hypothesis gives a
+# closed equation, and rw replaces every occurrence of its left side in the
+# goal. A breadth-first search over short chains of such rewrites (forward
+# and backward) closes many true implications outright, and the found chain
+# is emitted verbatim as `intro ...; rw [h a b, ← h c d, ...]`.
+
+def parse_tree(s, variables):
+    """One side of an equation as a tree: a variable name, or ('.', l, r)."""
+    s = s.strip()
+    while len(s) >= 2 and s[0] == "(" and s[-1] == ")":
+        depth = 0
+        wraps = True
+        for i, c in enumerate(s):
+            depth += (c == "(") - (c == ")")
+            if depth == 0 and i < len(s) - 1:
+                wraps = False
+                break
+        if wraps:
+            s = s[1:-1].strip()
+        else:
+            break
+    depth = 0
+    split_at = -1
+    for i, c in enumerate(s):
+        depth += (c == "(") - (c == ")")
+        if depth == 0 and c == OP:
+            split_at = i
+    if split_at >= 0:
+        return (".", parse_tree(s[:split_at], variables),
+                parse_tree(s[split_at + 1:], variables))
+    if len(s) == 1 and s in variables:
+        return s
+    raise ValueError("cannot parse: " + repr(s))
+
+
+def tree_equation(text):
+    seen = set()
+    order = []
+    for v in re.findall(r"\b([a-z])\b", text):
+        if v not in seen:
+            seen.add(v)
+            order.append(v)
+    lhs, rhs = text.split("=", 1)
+    return order, parse_tree(lhs, seen), parse_tree(rhs, seen)
+
+
+def subterms(t):
+    yield t
+    if isinstance(t, tuple):
+        yield from subterms(t[1])
+        yield from subterms(t[2])
+
+
+def match(pattern, term, sigma):
+    """Bind pattern variables (h's variables) against a ground term."""
+    if isinstance(pattern, str):
+        if pattern in sigma:
+            return sigma[pattern] == term
+        sigma[pattern] = term
+        return True
+    if not isinstance(term, tuple):
+        return False
+    return match(pattern[1], term[1], sigma) and match(pattern[2], term[2], sigma)
+
+
+def subst(pattern, sigma):
+    if isinstance(pattern, str):
+        return sigma[pattern]
+    return (".", subst(pattern[1], sigma), subst(pattern[2], sigma))
+
+
+def rewrite_all(t, frm, to):
+    if t == frm:
+        return to
+    if isinstance(t, tuple):
+        return (".", rewrite_all(t[1], frm, to), rewrite_all(t[2], frm, to))
+    return t
+
+
+def render(t):
+    if isinstance(t, str):
+        return t
+    return f"({render(t[1])} {OP} {render(t[2])})"
+
+
+def rewrite_prove(eq1_text, eq2_text, budget_s=45, max_depth=5, max_nodes=20000):
+    """Search for a rw chain from the goal to closure. Returns a proof body
+    or None. Every simulated step mirrors Lean semantics, so a found chain
+    verifies unless the judge's elaborator balks, which its feedback shows."""
+    h_vars, h_lhs, h_rhs = tree_equation(eq1_text)
+    g_vars, g_lhs, g_rhs = tree_equation(eq2_text)
+
+    def moves(goal):
+        out = []
+        for arrow, pat, rep in (("", h_lhs, h_rhs), ("← ", h_rhs, h_lhs)):
+            pat_vars = {v for v in subterms(pat) if isinstance(v, str)}
+            free = [v for v in h_vars if v not in pat_vars]
+            if len(free) > 2:
+                continue
+            for side in goal:
+                for u in subterms(side):
+                    sigma = {}
+                    if not match(pat, u, sigma):
+                        continue
+                    for fills in product(g_vars, repeat=len(free)):
+                        s2 = dict(sigma)
+                        for v, name in zip(free, fills):
+                            s2[v] = name
+                        frm = subst(pat, s2)
+                        to = subst(rep, s2)
+                        if frm == to:
+                            continue
+                        new_goal = (rewrite_all(goal[0], frm, to),
+                                    rewrite_all(goal[1], frm, to))
+                        if new_goal != goal:
+                            args = " ".join(render(s2[v]) for v in h_vars)
+                            out.append((f"{arrow}h {args}", new_goal))
+        return out
+
+    start = (g_lhs, g_rhs)
+    if start[0] == start[1]:
+        return f"intro {' '.join(g_vars)}\nrfl" if g_vars else "rfl"
+
+    deadline = time.monotonic() + budget_s
+    frontier = [(start, [])]
+    visited = {repr(start)}
+    for _ in range(max_depth):
+        next_frontier = []
+        for goal, path in frontier:
+            if time.monotonic() > deadline or len(visited) > max_nodes:
+                return None
+            for step, new_goal in moves(goal):
+                key = repr(new_goal)
+                if key in visited:
+                    continue
+                visited.add(key)
+                new_path = path + [step]
+                if new_goal[0] == new_goal[1]:
+                    steps = ", ".join(new_path)
+                    intro = f"intro {' '.join(g_vars)}\n" if g_vars else ""
+                    return f"{intro}rw [{steps}]"
+                next_frontier.append((new_goal, new_path))
+        frontier = next_frontier
+        if not frontier:
+            return None
+    return None
+
+
 # -- deterministic solve shared by both tracks -----------------------------
 
 def solve_deterministic(problem, budget_s):
-    """Return (verdict, code) if a deterministic certificate is found, else None."""
-    eq1 = parse_equation(normalize(problem["equation1"]))
-    eq2 = parse_equation(normalize(problem["equation2"]))
-    n, table = find_counterexample(eq1, eq2, budget_s)
+    """Return (verdict, code) if a deterministic certificate is found, else
+    None. The budget splits toward the counterexample hunt, since a found
+    table is checked before it ships while a rewrite chain can still fail
+    at elaboration."""
+    eq1_text = normalize(problem["equation1"])
+    eq2_text = normalize(problem["equation2"])
+    eq1 = parse_equation(eq1_text)
+    eq2 = parse_equation(eq2_text)
+
+    n, table = find_counterexample(eq1, eq2, budget_s * 0.7)
     if n is not None:
         return "false", make_false_code(n, table)
-    body = collapse_proof(problem["equation1"], problem["equation2"])
+
+    body = collapse_proof(eq1_text, eq2_text)
+    if body is not None:
+        return "true", make_true_code(body)
+
+    try:
+        body = rewrite_prove(eq1_text, eq2_text, budget_s=budget_s * 0.3)
+    except Exception:
+        body = None
     if body is not None:
         return "true", make_true_code(body)
     return None
@@ -355,7 +564,7 @@ def run_solo():
     det = None
     if eq1 is not None:
         try:
-            det = solve_deterministic(problem, budget_s=25)
+            det = solve_deterministic(problem, budget_s=420)
         except Exception:
             det = None
     solved_false = det is not None and det[0] == "false"
@@ -368,10 +577,10 @@ def run_solo():
         analysis = build_analysis(problem, solved_false)
     except Exception:
         analysis = "Solver analysis: unavailable for this problem."
-    rnd = 0
-    while True:
+    # Bounded model loop: eight rounds is where returns flatten, and a clean
+    # exit beats grinding into the wall-clock kill.
+    for rnd in range(8):
         send_message({"call": "llm", "context": {"round": str(rnd), "analysis": analysis}})
-        rnd += 1
         result = read_message()
         if "error" in result:
             return

@@ -23,21 +23,24 @@ judge rejects a large share of answers.
 `hybrid/solver.py` inverts that. It proves what it can without the model, and
 every deterministic answer is correct by construction:
 
-1. **Counterexample search** (a `false` verdict). It searches finite magmas
-   (Fin 2 and Fin 3 exhaustively, Fin 4 by constrained backtracking) for a
-   table where the hypothesis holds and the goal fails. The witness is
-   verified in Python before it is sent, so the judge's `decideFin!` only
-   confirms a fact that is already checked. No tokens are spent.
+1. **Counterexample search** (a `false` verdict). Fin 2 and 3 exhaustively,
+   affine magmas (p a + q b + s mod n) up to order 8, Fin 4 by constrained
+   backtracking, and hypothesis-filtered random tables on Fin 5 and 6. Every
+   witness is verified in Python before it is sent, so the judge's
+   `decideFin!` only confirms a fact that is already checked. No tokens.
 2. **Collapse proof** (a `true` verdict). If the hypothesis forces every
-   element equal, any goal follows from a one-line `all_eq` argument. No
-   tokens are spent.
-3. **Model fallback** (a `true` verdict that needs a real proof). Only here
+   element equal, any goal follows from a one-line `all_eq` argument.
+3. **Rewrite prover** (a `true` verdict). Simulates Lean's `rw` exactly and
+   searches short chains of hypothesis instances, forward and backward,
+   that close the goal; the found chain ships verbatim as
+   `intro ...; rw [h a b, ← h c d]`. No tokens.
+4. **Model fallback** (a `true` verdict that needs a real proof). Only here
    does it call the model, with a structural prompt (the MATCH then COLLAPSE
    method). In Solo the judge error is fed back each round; in Marathon a
    single guarded attempt is made per unsolved problem while the token
    budget allows.
 
-On the official 20-problem sample, the deterministic stages alone answer 14,
+On the official 20-problem sample, the deterministic stages alone answer 15,
 with no tokens and no incorrect certificates.
 
 ## One file, both tracks
