@@ -406,6 +406,16 @@ def rewrite_prove(eq1_text, eq2_text, budget_s=45, max_depth=5, max_nodes=20000)
 
     def moves(goal):
         out = []
+        # Free variables can be filled by any goal variable or small subterm
+        # of the current goal; compound fills are what reach the deeper
+        # chains, capped to keep the branching sane.
+        fill_pool = list(g_vars)
+        for side in goal:
+            for u in subterms(side):
+                if isinstance(u, tuple) and u not in fill_pool:
+                    fill_pool.append(u)
+        fill_pool = fill_pool[:10]
+
         for arrow, pat, rep in (("", h_lhs, h_rhs), ("← ", h_rhs, h_lhs)):
             pat_vars = {v for v in subterms(pat) if isinstance(v, str)}
             free = [v for v in h_vars if v not in pat_vars]
@@ -416,7 +426,7 @@ def rewrite_prove(eq1_text, eq2_text, budget_s=45, max_depth=5, max_nodes=20000)
                     sigma = {}
                     if not match(pat, u, sigma):
                         continue
-                    for fills in product(g_vars, repeat=len(free)):
+                    for fills in product(fill_pool, repeat=len(free)):
                         s2 = dict(sigma)
                         for v, name in zip(free, fills):
                             s2[v] = name
