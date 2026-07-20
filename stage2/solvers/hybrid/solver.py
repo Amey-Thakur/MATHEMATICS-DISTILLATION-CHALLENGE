@@ -41,8 +41,12 @@ The magma operator is written as the character U+25C7. Never write it as *.
 The proof body runs after `intro G _ h`, so `h` is the hypothesis, universally
 quantified over its variables. Derive the goal from `h`.
 
-Use only these tactics: intro, exact, have, calc, congr_arg, .symm, .trans.
-Never use: sorry, admit, decide, simp, aesop, omega, linarith, tauto.
+Do not write the intro line for the goal variables; it is added
+automatically. Begin directly with the proof steps.
+
+Use only these tactics: exact, have, calc, rw, congr_arg, .symm, .trans.
+Never use: sorry, admit, decide, simp, simpa, aesop, omega, linarith,
+tauto, ring, norm_num. Never claim a non-trivial equation by rfl.
 
 The MATCH then COLLAPSE method solves almost all of these:
   MATCH:   instantiate h with compound arguments so its shape lines up with
@@ -510,21 +514,39 @@ def extract_json(text):
     return None
 
 
+# Tactics the proof policy rejects or the judge routinely bounces; a body
+# containing one is discarded before it wastes a judge call.
+BANNED_TACTICS = re.compile(
+    r"\b(sorry|admit|simp|simpa|aesop|omega|decide|tauto|norm_num|ring|"
+    r"nlinarith|linarith|native_decide)\b"
+)
+
+
 def clean_proof_body(body):
     if ":= by" in body:
         body = re.sub(r"^.*?:=\s*by\s*\n?", "", body, count=1, flags=re.DOTALL)
     body = re.sub(r"^\s*by\s+", "", body)
     body = re.sub(r"^\s*import\s+.*\n?", "", body, flags=re.MULTILINE)
-    return body.strip()
+    body = body.strip()
+    if BANNED_TACTICS.search(body):
+        return ""
+    return body
 
 
 def code_from_answer(answer, eq1, eq2):
     """Turn a parsed model answer into Lean code, or None if unusable. A
     model counterexample is only forwarded when it verifies locally, so a
-    problem whose equations did not parse cannot submit a false verdict."""
+    problem whose equations did not parse cannot submit a false verdict.
+    For true proofs the goal intro is imposed here: models regularly forget
+    it, and that single omission rejected otherwise plausible proofs."""
     if answer.get("verdict") == "true":
         proof = clean_proof_body(answer.get("proof", ""))
-        return make_true_code(proof) if proof else None
+        if not proof:
+            return None
+        if eq2 is not None and eq2[0]:
+            proof = re.sub(r"^\s*intro[s]?\b[^\n]*\n?", "", proof, count=1)
+            proof = f"intro {' '.join(eq2[0])}\n" + proof
+        return make_true_code(proof)
     if answer.get("verdict") == "false" and eq1 is not None and eq2 is not None:
         tbl = answer.get("counterexample_table")
         try:
@@ -578,8 +600,21 @@ def run_solo():
     except Exception:
         analysis = "Solver analysis: unavailable for this problem."
     # Bounded model loop: eight rounds is where returns flatten, and a clean
-    # exit beats grinding into the wall-clock kill.
+    # exit beats grinding into the wall-clock kill. If the model flounders
+    # for three rounds, one deeper rewrite search often ends the argument
+    # deterministically before more tokens burn.
     for rnd in range(8):
+        if rnd == 3 and eq1 is not None:
+            try:
+                body = rewrite_prove(problem["equation1"], problem["equation2"],
+                                     budget_s=150, max_depth=7, max_nodes=80000)
+            except Exception:
+                body = None
+            if body is not None:
+                send_message({"call": "judge", "verdict": "true",
+                              "code": make_true_code(body)})
+                if read_message().get("status") == "accepted":
+                    return
         send_message({"call": "llm", "context": {"round": str(rnd), "analysis": analysis}})
         result = read_message()
         if "error" in result:
