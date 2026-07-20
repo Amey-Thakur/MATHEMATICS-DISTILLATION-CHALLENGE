@@ -399,22 +399,35 @@ def render(t):
 
 def rewrite_prove(eq1_text, eq2_text, budget_s=45, max_depth=5, max_nodes=20000):
     """Search for a rw chain from the goal to closure. Returns a proof body
-    or None. Every simulated step mirrors Lean semantics, so a found chain
-    verifies unless the judge's elaborator balks, which its feedback shows."""
+    or None. Two passes: a fast one filling free hypothesis variables with
+    goal variables only, then, on the remaining budget, a wide one that also
+    fills with compound goal subterms. The narrow pass keeps short chains
+    cheap under tight budgets; the wide pass reaches the deeper chains."""
+    deadline = time.monotonic() + budget_s
+    body = _rewrite_search(eq1_text, eq2_text, deadline - budget_s * 0.55,
+                           max_depth, max_nodes, compound_fills=False)
+    if body is not None:
+        return body
+    if time.monotonic() < deadline:
+        return _rewrite_search(eq1_text, eq2_text, deadline,
+                               max_depth, max_nodes, compound_fills=True)
+    return None
+
+
+def _rewrite_search(eq1_text, eq2_text, deadline, max_depth, max_nodes,
+                    compound_fills):
     h_vars, h_lhs, h_rhs = tree_equation(eq1_text)
     g_vars, g_lhs, g_rhs = tree_equation(eq2_text)
 
     def moves(goal):
         out = []
-        # Free variables can be filled by any goal variable or small subterm
-        # of the current goal; compound fills are what reach the deeper
-        # chains, capped to keep the branching sane.
         fill_pool = list(g_vars)
-        for side in goal:
-            for u in subterms(side):
-                if isinstance(u, tuple) and u not in fill_pool:
-                    fill_pool.append(u)
-        fill_pool = fill_pool[:10]
+        if compound_fills:
+            for side in goal:
+                for u in subterms(side):
+                    if isinstance(u, tuple) and u not in fill_pool:
+                        fill_pool.append(u)
+            fill_pool = fill_pool[:10]
 
         for arrow, pat, rep in (("", h_lhs, h_rhs), ("← ", h_rhs, h_lhs)):
             pat_vars = {v for v in subterms(pat) if isinstance(v, str)}
@@ -445,7 +458,6 @@ def rewrite_prove(eq1_text, eq2_text, budget_s=45, max_depth=5, max_nodes=20000)
     if start[0] == start[1]:
         return f"intro {' '.join(g_vars)}\nrfl" if g_vars else "rfl"
 
-    deadline = time.monotonic() + budget_s
     frontier = [(start, [])]
     visited = {repr(start)}
     for _ in range(max_depth):
