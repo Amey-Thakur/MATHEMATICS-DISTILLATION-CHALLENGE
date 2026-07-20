@@ -68,6 +68,15 @@ from itertools import product
 OP = "◇"  # the magma operator, U+25C7
 
 
+def normalize(text):
+    """Problem statements sometimes write the operator as * or a lookalike
+    glyph; the rules call it a display convention. Everything becomes the
+    canonical diamond before parsing, so no spelling can crash the solver."""
+    for alias in ("*", "⋄", "∘", "·"):
+        text = text.replace(alias, OP)
+    return text
+
+
 # -- equation parsing ------------------------------------------------------
 
 def parse_side(s, variables):
@@ -256,8 +265,8 @@ def collapse_proof(eq1_text, eq2_text):
 
 def solve_deterministic(problem, budget_s):
     """Return (verdict, code) if a deterministic certificate is found, else None."""
-    eq1 = parse_equation(problem["equation1"])
-    eq2 = parse_equation(problem["equation2"])
+    eq1 = parse_equation(normalize(problem["equation1"]))
+    eq2 = parse_equation(normalize(problem["equation2"]))
     n, table = find_counterexample(eq1, eq2, budget_s)
     if n is not None:
         return "false", make_false_code(n, table)
@@ -301,14 +310,19 @@ def clean_proof_body(body):
 
 
 def code_from_answer(answer, eq1, eq2):
-    """Turn a parsed model answer into Lean code, or None if unusable."""
+    """Turn a parsed model answer into Lean code, or None if unusable. A
+    model counterexample is only forwarded when it verifies locally, so a
+    problem whose equations did not parse cannot submit a false verdict."""
     if answer.get("verdict") == "true":
         proof = clean_proof_body(answer.get("proof", ""))
         return make_true_code(proof) if proof else None
-    if answer.get("verdict") == "false":
+    if answer.get("verdict") == "false" and eq1 is not None and eq2 is not None:
         tbl = answer.get("counterexample_table")
-        if isinstance(tbl, list) and tbl and _witness(eq1, eq2, len(tbl), tbl):
-            return make_false_code(len(tbl), tbl)
+        try:
+            if isinstance(tbl, list) and tbl and _witness(eq1, eq2, len(tbl), tbl):
+                return make_false_code(len(tbl), tbl)
+        except Exception:
+            return None
     return None
 
 
@@ -326,18 +340,34 @@ def send_message(msg):
 
 
 def run_solo():
-    problem = read_message()["problem"]
-    eq1 = parse_equation(problem["equation1"])
-    eq2 = parse_equation(problem["equation2"])
+    problem = dict(read_message()["problem"])
+    for field in ("equation1", "equation2"):
+        problem[field] = normalize(str(problem.get(field, "")))
 
-    det = solve_deterministic(problem, budget_s=25)
+    # A parse failure on an unusual equation spelling must never kill the
+    # process; the model fallback can still answer without local analysis.
+    try:
+        eq1 = parse_equation(normalize(problem["equation1"]))
+        eq2 = parse_equation(normalize(problem["equation2"]))
+    except Exception:
+        eq1 = eq2 = None
+
+    det = None
+    if eq1 is not None:
+        try:
+            det = solve_deterministic(problem, budget_s=25)
+        except Exception:
+            det = None
     solved_false = det is not None and det[0] == "false"
     if det is not None:
         send_message({"call": "judge", "verdict": det[0], "code": det[1]})
         if read_message().get("status") == "accepted":
             return
 
-    analysis = build_analysis(problem, solved_false)
+    try:
+        analysis = build_analysis(problem, solved_false)
+    except Exception:
+        analysis = "Solver analysis: unavailable for this problem."
     rnd = 0
     while True:
         send_message({"call": "llm", "context": {"round": str(rnd), "analysis": analysis}})
@@ -395,7 +425,10 @@ def run_marathon():
             raw = raw.strip()
             if raw:
                 try:
-                    problems.append(json.loads(raw))
+                    prob = json.loads(raw)
+                    for field in ("equation1", "equation2"):
+                        prob[field] = normalize(str(prob.get(field, "")))
+                    problems.append(prob)
                 except json.JSONDecodeError:
                     continue
 
