@@ -2,6 +2,8 @@
 
 ![Stage 1 Social Preview](./social_preview.png?v=2)
 
+**Competition page**: [Stage 1 overview](https://competition.sair.foundation/competitions/mathematics-distillation-challenge-equational-theories-stage1/overview)
+
 All work from Stage 1 of the SAIR Mathematics Distillation Challenge is preserved here.
 
 ## What Stage 1 Was

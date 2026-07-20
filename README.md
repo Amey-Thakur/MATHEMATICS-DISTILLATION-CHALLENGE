@@ -4,6 +4,8 @@
 
 **Prepared by**: [Amey Thakur](https://github.com/Amey-Thakur)
 
+**Competition**: [Stage 1](https://competition.sair.foundation/competitions/mathematics-distillation-challenge-equational-theories-stage1/overview) · [Stage 2](https://competition.sair.foundation/competitions/mathematics-distillation-challenge-equational-theories-stage2/overview)
+
 Welcome to the long-term research repository for the SAIR Mathematics Distillation Challenge. This repository contains all research, analysis, source codes, and submission artifacts for both Stage 1 and Stage 2 of the competition.
 
 ## Repository Architecture

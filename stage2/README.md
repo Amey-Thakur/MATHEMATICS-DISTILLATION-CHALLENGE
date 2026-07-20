@@ -2,6 +2,8 @@
 
 ![Stage 2 Social Preview](./social_preview.png?v=2)
 
+**Competition page**: [Stage 2 overview](https://competition.sair.foundation/competitions/mathematics-distillation-challenge-equational-theories-stage2/overview)
+
 Welcome to the Stage 2 active research and development workspace for the SAIR Mathematics Distillation Challenge.
 
 ## Stage 2 Overview
