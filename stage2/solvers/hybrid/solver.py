@@ -397,27 +397,34 @@ def render(t):
     return f"({render(t[1])} {OP} {render(t[2])})"
 
 
+def build_rule(name, text):
+    v, lhs, rhs = tree_equation(text)
+    return (name, v, lhs, rhs)
+
+
 def rewrite_prove(eq1_text, eq2_text, budget_s=45, max_depth=5, max_nodes=20000):
-    """Search for a rw chain from the goal to closure. Returns a proof body
-    or None. Two passes: a fast one filling free hypothesis variables with
-    goal variables only, then, on the remaining budget, a wide one that also
-    fills with compound goal subterms. The narrow pass keeps short chains
-    cheap under tight budgets; the wide pass reaches the deeper chains."""
+    """Search for a rw chain from the goal to closure using the hypothesis
+    alone. Two passes: goal-variable fills first, compound subterm fills on
+    the remaining budget."""
+    rules = [build_rule("h", eq1_text)]
     deadline = time.monotonic() + budget_s
-    body = _rewrite_search(eq1_text, eq2_text, deadline - budget_s * 0.55,
-                           max_depth, max_nodes, compound_fills=False)
-    if body is not None:
-        return body
-    if time.monotonic() < deadline:
-        return _rewrite_search(eq1_text, eq2_text, deadline,
-                               max_depth, max_nodes, compound_fills=True)
-    return None
+    found = _rewrite_search(rules, eq2_text, deadline - budget_s * 0.55,
+                            max_depth, max_nodes, compound_fills=False)
+    if found is None and time.monotonic() < deadline:
+        found = _rewrite_search(rules, eq2_text, deadline,
+                                max_depth, max_nodes, compound_fills=True)
+    if found is None:
+        return None
+    g_vars, steps = found
+    intro = f"intro {' '.join(g_vars)}\n" if g_vars else ""
+    return intro + ("rfl" if not steps else f"rw [{', '.join(steps)}]")
 
 
-def _rewrite_search(eq1_text, eq2_text, deadline, max_depth, max_nodes,
+def _rewrite_search(rules, goal_text, deadline, max_depth, max_nodes,
                     compound_fills):
-    h_vars, h_lhs, h_rhs = tree_equation(eq1_text)
-    g_vars, g_lhs, g_rhs = tree_equation(eq2_text)
+    """Core BFS over rw chains drawn from several rules. Returns
+    (goal_vars, steps) with steps referencing each rule by name, or None."""
+    g_vars, g_lhs, g_rhs = tree_equation(goal_text)
 
     def moves(goal):
         out = []
@@ -429,34 +436,36 @@ def _rewrite_search(eq1_text, eq2_text, deadline, max_depth, max_nodes,
                         fill_pool.append(u)
             fill_pool = fill_pool[:10]
 
-        for arrow, pat, rep in (("", h_lhs, h_rhs), ("← ", h_rhs, h_lhs)):
-            pat_vars = {v for v in subterms(pat) if isinstance(v, str)}
-            free = [v for v in h_vars if v not in pat_vars]
-            if len(free) > 2:
-                continue
-            for side in goal:
-                for u in subterms(side):
-                    sigma = {}
-                    if not match(pat, u, sigma):
-                        continue
-                    for fills in product(fill_pool, repeat=len(free)):
-                        s2 = dict(sigma)
-                        for v, name in zip(free, fills):
-                            s2[v] = name
-                        frm = subst(pat, s2)
-                        to = subst(rep, s2)
-                        if frm == to:
+        for name, r_vars, r_lhs, r_rhs in rules:
+            for arrow, pat, rep in (("", r_lhs, r_rhs), ("← ", r_rhs, r_lhs)):
+                pat_vars = {v for v in subterms(pat) if isinstance(v, str)}
+                free = [v for v in r_vars if v not in pat_vars]
+                if len(free) > 2:
+                    continue
+                for side in goal:
+                    for u in subterms(side):
+                        sigma = {}
+                        if not match(pat, u, sigma):
                             continue
-                        new_goal = (rewrite_all(goal[0], frm, to),
-                                    rewrite_all(goal[1], frm, to))
-                        if new_goal != goal:
-                            args = " ".join(render(s2[v]) for v in h_vars)
-                            out.append((f"{arrow}h {args}", new_goal))
+                        for fills in product(fill_pool, repeat=len(free)):
+                            s2 = dict(sigma)
+                            for v, fill in zip(free, fills):
+                                s2[v] = fill
+                            frm = subst(pat, s2)
+                            to = subst(rep, s2)
+                            if frm == to:
+                                continue
+                            new_goal = (rewrite_all(goal[0], frm, to),
+                                        rewrite_all(goal[1], frm, to))
+                            if new_goal != goal:
+                                args = " ".join(render(s2[v]) for v in r_vars)
+                                out.append((f"{arrow}{name} {args}".rstrip(),
+                                            new_goal))
         return out
 
     start = (g_lhs, g_rhs)
     if start[0] == start[1]:
-        return f"intro {' '.join(g_vars)}\nrfl" if g_vars else "rfl"
+        return g_vars, []
 
     frontier = [(start, [])]
     visited = {repr(start)}
@@ -472,14 +481,129 @@ def _rewrite_search(eq1_text, eq2_text, deadline, max_depth, max_nodes,
                 visited.add(key)
                 new_path = path + [step]
                 if new_goal[0] == new_goal[1]:
-                    steps = ", ".join(new_path)
-                    intro = f"intro {' '.join(g_vars)}\n" if g_vars else ""
-                    return f"{intro}rw [{steps}]"
+                    return g_vars, new_path
                 next_frontier.append((new_goal, new_path))
         frontier = next_frontier
         if not frontier:
             return None
     return None
+
+
+# Fresh names for derived-lemma variables; they never collide with the
+# goal's x..v because each have-lemma binds its own scope anyway.
+LEMMA_VARS = "abcdefgh"
+
+
+def derive_lemmas(h_rule, budget_s, limit=10):
+    """Saturate small consequences of h: rewrite either side of h with an
+    instance of h itself, keep the resulting equations that our own engine
+    can prove from h in a few steps, and return them with their proofs.
+    These are the stepping stones the direct chain search cannot see."""
+    _, h_vars, h_lhs, h_rhs = h_rule
+    deadline = time.monotonic() + budget_s
+
+    def renamed(pair):
+        order = []
+        def walk(t):
+            if isinstance(t, str):
+                if t not in order:
+                    order.append(t)
+            else:
+                walk(t[1]); walk(t[2])
+        walk(pair[0]); walk(pair[1])
+        mapping = {v: LEMMA_VARS[i] for i, v in enumerate(order)}
+        def rename(t):
+            if isinstance(t, str):
+                return mapping[t]
+            return (".", rename(t[1]), rename(t[2]))
+        return rename(pair[0]), rename(pair[1])
+
+    seen = set()
+    candidates = []
+    base = (h_lhs, h_rhs)
+    for side_idx in (0, 1):
+        for pat, rep in ((h_lhs, h_rhs), (h_rhs, h_lhs)):
+            pat_vars = {v for v in subterms(pat) if isinstance(v, str)}
+            free = [v for v in h_vars if v not in pat_vars]
+            if len(free) > 1:
+                continue
+            for u in subterms(base[side_idx]):
+                sigma = {}
+                if not match(pat, u, sigma):
+                    continue
+                for fills in product(h_vars, repeat=len(free)):
+                    s2 = dict(sigma)
+                    for v, fill in zip(free, fills):
+                        s2[v] = fill
+                    new_side = rewrite_all(base[side_idx], subst(pat, s2),
+                                           subst(rep, s2))
+                    pair = ((new_side, base[1]) if side_idx == 0
+                            else (base[0], new_side))
+                    if pair[0] == pair[1]:
+                        continue
+                    if sum(1 for _ in subterms(pair[0])) > 11 or \
+                       sum(1 for _ in subterms(pair[1])) > 11:
+                        continue
+                    pair = renamed(pair)
+                    key = repr(pair)
+                    if key not in seen:
+                        seen.add(key)
+                        candidates.append(pair)
+
+    lemmas = []
+    for i, (lhs, rhs) in enumerate(candidates):
+        if len(lemmas) >= limit or time.monotonic() > deadline:
+            break
+        lemma_vars = sorted({v for t in (lhs, rhs)
+                             for v in subterms(t) if isinstance(v, str)},
+                            key=LEMMA_VARS.index)
+        goal_text = f"{render(lhs)} = {render(rhs)}"
+        found = _rewrite_search([h_rule], goal_text,
+                                time.monotonic() + 1.5, 3, 4000,
+                                compound_fills=False)
+        if found is None:
+            continue
+        _, steps = found
+        if not steps:
+            continue
+        name = f"d{len(lemmas) + 1}"
+        proof = f"intro {' '.join(lemma_vars)}\nrw [{', '.join(steps)}]"
+        lemmas.append(((name, lemma_vars, lhs, rhs), proof))
+    return lemmas
+
+
+def lemma_prove(eq1_text, eq2_text, budget_s=120):
+    """The stronger true prover: saturate derived lemmas from h, then search
+    the goal over h plus the lemmas, emitting have blocks for the lemmas the
+    chain actually uses."""
+    h_rule = build_rule("h", eq1_text)
+    deadline = time.monotonic() + budget_s
+    lemmas = derive_lemmas(h_rule, budget_s=min(20.0, budget_s * 0.2))
+    if not lemmas:
+        return None
+    rules = [h_rule] + [rule for rule, _ in lemmas]
+
+    found = _rewrite_search(rules, eq2_text,
+                            deadline - (deadline - time.monotonic()) * 0.5,
+                            5, 40000, compound_fills=False)
+    if found is None and time.monotonic() < deadline:
+        found = _rewrite_search(rules, eq2_text, deadline, 5, 40000,
+                                compound_fills=True)
+    if found is None:
+        return None
+
+    g_vars, steps = found
+    used = {step.replace("←", "").strip().split()[0] for step in steps}
+    lines = [f"intro {' '.join(g_vars)}"] if g_vars else []
+    for (name, lemma_vars, lhs, rhs), proof in lemmas:
+        if name not in used:
+            continue
+        binder = " ".join(lemma_vars)
+        head = f"have {name} : ∀ {binder} : G, {render(lhs)} = {render(rhs)} := by"
+        body = "\n".join("  " + l for l in proof.split("\n"))
+        lines.append(head + "\n" + body)
+    lines.append("rfl" if not steps else f"rw [{', '.join(steps)}]")
+    return "\n".join(lines)
 
 
 # -- deterministic solve shared by both tracks -----------------------------
@@ -627,12 +751,21 @@ def run_solo():
     # deterministically before more tokens burn.
     for rnd in range(8):
         if rnd == 3 and eq1 is not None:
-            try:
-                body = rewrite_prove(problem["equation1"], problem["equation2"],
-                                     budget_s=150, max_depth=7, max_nodes=80000)
-            except Exception:
-                body = None
-            if body is not None:
+            # Two deterministic escalations while the model flounders: a
+            # deeper direct chain, then the lemma-saturation prover that
+            # chains derived consequences of h.
+            for prover in (
+                lambda: rewrite_prove(problem["equation1"], problem["equation2"],
+                                      budget_s=150, max_depth=7, max_nodes=80000),
+                lambda: lemma_prove(problem["equation1"], problem["equation2"],
+                                    budget_s=180),
+            ):
+                try:
+                    body = prover()
+                except Exception:
+                    body = None
+                if body is None:
+                    continue
                 send_message({"call": "judge", "verdict": "true",
                               "code": make_true_code(body)})
                 if read_message().get("status") == "accepted":
