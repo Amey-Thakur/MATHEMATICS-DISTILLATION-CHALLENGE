@@ -1,0 +1,50 @@
+## Name: ci.yml
+## Purpose: Gate the submitted solver against the evaluation sandbox.
+## Description: The sandbox is python:3.12-slim with no third-party packages
+##   and no network, so a solver that imports outside the standard library
+##   dies on import and loses every answer rather than degrading. It also caps
+##   the submitted file at 512000 bytes. Neither constraint was checked
+##   anywhere, and neither is visible from a passing local run, because the
+##   packages are installed here. This job runs the checker on the same Python
+##   the sandbox uses. Third-party actions are pinned to commit SHAs.
+## Tech Stack: GitHub Actions, Python
+## License: MIT
+## Authors: Amey Thakur (https://github.com/Amey-Thakur)
+## Date: 2026-07-27
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "stage2/solvers/**"
+      - "stage2/scripts/**"
+      - ".github/workflows/ci.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "stage2/solvers/**"
+      - "stage2/scripts/**"
+      - ".github/workflows/ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  solver:
+    name: Solver fits the sandbox
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+
+      # Matches the evaluation image, so stdlib membership is judged against
+      # the same standard library the solver will actually run on.
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      # No install step: the checker is stdlib-only by design, for the same
+      # reason the solver has to be.
+      - name: Check the submitted solver
+        run: python stage2/scripts/check_solver.py
