@@ -407,6 +407,10 @@ def _ordered_vars(text):
 def collapse_proof(eq1_text, eq2_text):
     """If the hypothesis has the form x = <expr without x>, every two elements
     are equal and any goal follows. Returns a proof body, or None."""
+    # A statement with no equals sign is not an equation; callers may
+    # hand us anything, so this returns rather than raising.
+    if "=" not in eq1_text or "=" not in eq2_text:
+        return None
     lhs, rhs = (p.strip() for p in eq1_text.split("=", 1))
     if lhs != "x" or "x" in set(re.findall(r"\b([a-z])\b", rhs)):
         return None
@@ -880,7 +884,12 @@ def build_analysis(problem, solved_false):
                      "counterexample table only; never attempt a proof.")
     elif not solved_false:
         notes.append("No counterexample exists up to Fin 4, so this is almost certainly TRUE.")
-    if collapse_proof(problem["equation1"], problem["equation2"]):
+    try:
+        collapses = collapse_proof(normalize(str(problem.get("equation1", ""))),
+                                   normalize(str(problem.get("equation2", ""))))
+    except Exception:
+        collapses = None
+    if collapses:
         notes.append("The hypothesis collapses every element to one value.")
     if known == 1:
         # Waypoints: laws that follow from h and imply the goal. Proving one
