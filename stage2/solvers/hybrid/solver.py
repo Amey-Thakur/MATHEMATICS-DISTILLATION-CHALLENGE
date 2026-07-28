@@ -101,20 +101,64 @@ def _etp_tables():
     return _ETP_CACHE
 
 
+_EQ_BLOB = b"c-obn(RCzAk|h6!iut@E;>e1&7G>Z_IR1{3+uiA|Mh4tX1wZ{}Dh+Ou8Ul^1L;?8o-~apHfBx&w|N1Zg^WQ)J{r~>&|M}}r{`0^8^XGi|bH4p~zRdrxzmE9z{m=OLGY)fH=kn{zzRw*Tc6|KV=f`sRSPmb1+MC12=J2t(e(e0`&wf9HFS&mH8DIa5!yNay|6GsX&-ClZa@g_lXCEKS;bS>`>}hWfADhF+=KitsufHPsu<`Fd`Nzr6KlwhBzy5^Z=Y0K>&vQ6_R6b7r=TGLl<-afEuj^wRA7lAA>c{2R;j`w<!ou?U#5q02awf}}8)ud?vz(cF=KMM|!Ydb+Yjk=n$H!RCWI2=N%q(YSIWzUlS1v5Mu;jv$3rj96xv=EIk_$^NEV*pHWXUB<E?IK<c<j87Wgp8vmVGSyvh2&UFU!6y&sp}(vTv4sQ};ceJ@L8;FOPA0jOF9#AD7R^SXfwCK5yQq$5_r}IdkL8a%Pq@)6blb>vz0HEZ6AxSWb_zoXK(~%b8iu%yMS>nXg<}a$(7ZB^Q=lSaM;>g(Vl3Tv&41e94kamRz#r^6}VlAIm<LeJuM}_GQ_ZWnY$kTb{G*n`PfD`=;-EPJdha{M+C0F^-S1d>r-T^6T(7ts@Hy%jaX~Gg;1LIdkL8a%Pq@Q_uYSZ?r7eh~*lc9?S7DmNQw-WH~d-nOV+EJ@YdcmRwkJVabIh7nWRDa$(7ZB^Q=lHea&jk|mccxqLo$-p8_!Wgp8vmVH_FW!aZy-<Ibr`)1iU%f6}mKKuHgzcqb-_v-Z+hsRhx4)JmMc#MUGh2`_H)0r%1vYfebW;rv<nGt8s*Xwt_Ml9Fp_*f2)v7E_rCd-*w&dhRV#F?MDu;jv$3rj96xv=EIk_$^NEV;1cviXuFmn^wt$>sC0(>|7cEc;mYvFyvTFU!6x`?fr1**D9+S@w<C_x$Iv_usO=vK$}d^cc&>(LXL9kFl_@uzWstJd@>2mNPfbEN5mpGyTlJuHXA_{2%*RuF>hSoE~F2ljTg7GqaqT<;?UmKXYNpg(Vl3Tv&2p$%Q2smRwkJVaa9lB}*<@a><g*=VQlxEc;mYvFu~nmt|j;eOdNxdCszLmVLAAo4)V)_7%~ue{(uM!r>9FA4B<={QCCQ)e`|%g706Me?7wWG_I%J*>XKC*V9r?n_u6)p8U>$>s9#nNDhy1J&o&WTu;mOv|LY1Iqf3@t{HI6fNKU^GvJy5*9^F3z%>J|8QeX{HG^C;$Tfp}dk5q72-iJa_i)|Abx*E)a@~{bo_lU{-80ucbKNs#&-3+j`}@DeIX}YpN4S0r?PK!w5v~MW3BLWSo!28=Pvd&poh{eXay>2WwE1#<&R2o!Rrvl$zCXhCG_I#{JuTPMay>2Ww2ut9X23NAt{HI6fNKU^GvJy5*9^F3aQ7hB406pN*9`K0rTTh=>mIIqxbES)C)Yi>?#Xq}J-4~;nd_dp?wPjdx&9lsf8HSc)n-^{5a*!J$*<+#(Cy3!=Jy+m%M4-{VwZVd5xXLGMemwl%fBnU<cx6R^3U;>8N@EcF2t^gT@kyYcU^Ku<c!D}kuxG^M9zqu5ji7rM&xXKj>tJ8=ZKu&|7>uXLGU1W5IhK;2%ZR@2p)62M(~W_8NoA}=lQk#o8z}*i2La>lXV8M3$Y8aD`Ho~uIOF!Yx#HBd(McQ5ji7rM&yjh8Idz0XGG43oFj6M$T=eCb7vlB5IhJT1P_8If+vC}g2!C15j-P!M(~X0d3PqFGZCGM=uAXsB03Y%nTXCrbS9!R5uJ(XOhjiQIup^Eh|WZGCZaPDor&m7L}wy86VaK7&O~%3qB9YliRes3XCgWi(V2+OM06&iGZCGM=uAXsn%9{Tof*-Y5uJIOnRN!igWy5%Ab28pB6uQrB6vpdjNlo;Gn(h(7{W1xV+h9(jv*XFIEHWx;TXa(gkuQD5RM@nLpX+T4B;5Uu?WW^9E)%)!m$X)A{>iwEW)t}$08hya4f>H2*)BEi*PK$F>|jR;n)brMmRRYv5%RZ8NrNTMld6o5zG<H5zG<H5zG<HBbY}pk6<3bY<zwM^COra!Tbp3M>GF%{+iVLA20VAwi(1Z_;YfeK`<kjU;k)!nL+GA>@v?QVpqhj_+4{+?|pRx;l|}#&6gR(F2pXxu83U`yW)3Uaz^Bg$Qh9{B4<R-h@25QBXUOMY<!N$IU?tXoL}D(zsw+b5IhJT1WyD{1WyEyxn3i9M(~W_8PD?^-+MoICgOg&&19QF>_Y59?26bGu`7Pp`R7xeI}`C50Pz|C@frZ}8UXPc0Pz|C@frZ}8UXPc;58GGb41P&IUhUoID_Cp@E~{)JP|w*JP|zRdX3;2!83wqJkN7{?|tn|L}wy86VaK7&O~%3qB9YliRes3XCgWi(V2+OM06&iGZCGM=uAXsB03Y%nTXCrbS9!R5uJ(XOhjiQIup^Eh|WZGCZaPDor&m7L}wy86VaLGb!J3oMs#LGXC7x}n?dj(cn~}Yo(P@@o(P@@o)J7Fct-Gy=eanBa17xX!ZCzn2*(hPAsj<EhHwnw7{W1xV+h9(jv*XFIEHX6!m$X)A{>iwEW)t}$08hya4f>H2*)BEi*PK$u?WW^9E)(w+$%>oHo~zHj*W2aV`gPWFe8`|%m`)#a|Ck)a|Ck)a|H7U<`K*zm`5-hpC7^e2<AsHKZ5!3%ztb@XZrjz`7b}lbeln(gFYv}mY-F<G9#GZKgM#KLF_{8GS4ewSH!O9U9b1vFF!W5&md;9&LDOnb|H2}?26bGz3ZGaB4<R-h@25QBXUOMjK~?0Ga_f>b41P&IY;FD{&BC{41x#2gWy5%MDRrLMDUpFHG*dZ&j_B;Jg<B1dOt<nPq&$@Gl*S?U5H%~yCQZ)@0wrB?>ks?M&yjh8Idz0XGG43oDn%Aaz^AFk#j`O5jmeb^E`v#LGU1W5Ihk)5j+t*=6a3b8NoAxXEe{dGZCGM=uAXsB03Y%nTXCrbS9!R5uJ(XOhjiQIup^Eh|WZGCZaPDor&m7L}wy86VaK7&O~%3qB9YliRes3XCgWi(V2+OM06&iGZCGM=uAXsB0AH&&Wz~Hh|Y}Y%+t)QGYB384}u556TuU~6TuU~GlFLX&j_B;JZHxcjv*XFIEHWx;TXa(gkuQD5RM@nLpX+T4B;5UF@$3X#}JN1I2PepgkuqoMK~7WScGE{jzu^Y;aG%Y5spPT7U5WgV-b#-d*uknMmRRYu@R1a&g{$xW&|^W8NrNTj$n>pj$n>pj$j_aJc4-y^9W|+^COra!Tbp3M=(E{`TVuW_pf~tGb}TRbNInIInE%M5zMb&(X`AUb|H3|=M}LlVpo2!YfkUI?`|O6IRA>UWd^Yeu?w*)Vpqhj{9xBPXGG43oDn%Aaz^Bg$Qh9{B4<R-#^;EfBXW+&`Sq*JmKg*Of(OBa;ECXg;ECWd*J}jN2%Zr<^8=pe^xpfqGZFXGbtcOUVi#f;Vpqhjh+X-?uH)~4KX)eLH2~r@0OB<O;xz!`H2~r@0OB<O;xz!`HNa~oBIk&lBXT}==5YqWgWy5%Ab28pB6uQr%=H?<GlFLX&-{SrIlcG3cP64U5uJ(XOhjiQIup^Eh|WZGCZaPDor&m7L}wy86VaK7&O~%3qB9YliRes3XCgWi(V2+OM06&iGZCGM=uAXsB03Y%nTXCrbS9!R5uJ(XO!GQ3qBA2pGomw(GqcPfcn~}Y9t2MWPXtc{PXx~ho)J7Fc;*K@XU7nZAsj<EhHwnw7{W1xV+h9(jv*XFIEHWx;TXa(gkuQD5ROGS7U5WgV-b!;I2PepgkuqoMK~7WScGE{jzu^Y;aG%Y5ssOA<p{?{I5xtu5srP%Y|IE|1T%se!Hi&zV2)spV2)spU>?Cdf_Vh<2xjB+BbXn-{0QbpFh4(F{^Rrg)%Q>NIKAI{oMD?moP$3n#~B1Og86f1-G$hN*kztq#IA^4@w;B{y}y4t$B_r&#%U(o3}P2z7h+e$u83XnyUsZyaz^Bg$Qh9{B4<R-h@25QBXTxAN8}ulb41RcGb;~*2f>5jLGVQIMDRrLnCmryX9Uj(p7A`dd+v5WMchx<nQSwNU5H(XT@kw?cE#_S;|wBaM9zqu5ji7rM&yjh8Idz0XGG2sIY;Cik@K-L&oc-f1P_7-!4ts~!4tt_uGa{j5j-P!#`C;86VaK7&O~%3qB9YliRes3XCgWi(V2+OM06&iGZCGM=uAXsB03Y%nTXCrbS9!R5uJ(XOhjiQIup^Eh|WZGCZaPDor&m7L}wy86VaK7&O~%3qBG6w%!tm6=*)=DJk88DgWy5%Ab1cw5j+t*5j+t*BX~yejNlp1b9M~j7{W1xV+h9(jv*XFIEHWx;TXa(gkuQD5RM@nLpX+T4B=RWV-b!;I2PepgkuqoMK~7WScGE{jzu^Y;aG%Y5spPT7U7t=SB`LOgkvKd8{ydJ%*u>lMld6o5zGkY2<8ap2<8ap2<8#YBbY}pk6<=FKZ5xY%#UDx1oPvW|N2_w@rS^@zJGa}VVyyogFYwc83Z$enbY@NpJx!e5WCFtir5vgD|**_&LG@CxN)4xI)m7S*oD{?u`6O%^sY<Jh@25QBXUOMjK~?0Ga_e1&WN0i&k;FC<Q$Q6PCu*RJcHmt@E~{)JP|w*JP|zRdX3;2!83wqG|%5Zi{SVJ0^g1y?x)L4))~Yu#4g0Hh+Pr8qIb=C29Yx&XGG43oDn%Aaz^Bg$Qh9{BIk&lBXW+&`P`Yu83Yf42f>5jiQtLgiQqBUYXr{-o)J8wd0w4~=uAXsB03Y%nTXCrbS9!R5uJ(XOhjiQIup^Eh|WZGCZaPDor&m7L}wy86VaK7&O~%3qB9YliRes3XCgWi(V2+OM06&iGZCGM=uAXsB03Y%ndWt7L}x~HW<+NmXJ(y2@E~{)JP4i$o(P@@o(P^1JR^8U@QmiUIEHWx;TXa(gkuQD5RM@nLpX+T4B;5UF@$3X#}JMo978yUa4f>H2*)BEi*PK$u?WW^9E)%)!m$X)A{>iwEW)t}$08hyaLn8*M>saZu@R1qaBNOLqxC$4U`8+_m=Vkf<_P8p<_P8p<_P8y%p;gbFppq1K0ku_5zLQZegyNQng2L{P3rw^7=4Cq25}DloSbJ6%m`)<|IXn&gV=@GWu8~Wu83XnyXN@b`{oA1jq^;l8N@EcF2t^gT@kzDcU^Ku<c!D}kuxG^M9zqu5ji7rM&xXKj>tJ8=ZKth`1eug83Yf42f>5jiQtLgiQqBUYXr{-o)J9bd7k5Y@8`}$+)uZeY%_>mh+T+X5xXLG#qXN)3?gSl&WM~5IU{mL<c!D}kuxG^M9vX8N8}ul^RY9JGYB384}u556TuU~6TxGy*9e{wJR^9<^E}7*-nY&~bS9!R5uJ(XOhjiQIup^Eh|WZGCZaPDor&m7L}wy86VaK7&O~%3qB9YliRes3XCgWi(V2+OM06&iGZCGM=uAXsB03Y%nTXCrbS9!R5uIsXXGU~pL}x~H=6Pne83Yf42f>5jiQtLgiQtLg8NoAxX9Ul9o{M7$#}JMo978yUa17xX!ZCzn2*(hPAsj<EhHwnw7{W1xV+hA09E)%)!m$X)A{>iwEW)t}$08hya4f>H2*)BEi*PK$u?WY^y>f(OBODvy*a*kw@O_cz83Z$e8NrNTMleS(M=(b)M=(b)k6<3bJc4-yv+?;6%#UDx1oI=9AJ6>xeUYzU0`U9)_8Hb0#5w45a+*OfBbZ+^`!2*T#4hu^B6daWir)44-uvr^_n&h{xN)4xI)m7S*oD{?u`6O%^sZyhh@25QBXUOMjK~?0Ga_e1&WN0i&k;FC<Q$RnYi8#`@E~{)JP4i$o(P@@9&^1$@QmOY!84lY^PaokPZ9UiZ6@msVi#f;Vpqhjh+WaU<}`!I8Idz0XGG43oDn%Aaz^Bg$QhAyM9vX8N926z%<~L_2f>5jLGVQIMDRrLnCmryX9Uj(p3yw7&O~%3qB9YliRes3XCgWi(V2+OM06&iGZCGM=uAXsB03Y%nTXCrbS9!R5uJ(XOhjiQIup^Eh|WZGCZaPDor&m7L}wy86VaK7&O~%3qB9YliReu8Iy0g(BRVspGmkT~&LDUYJO~~HPXtc{PXtc{&j_9oJR^8U^Bf&RIEHWx;TXa(gkuQD5RM@nLpX+T4B;5UF@$3X#}JMo978x3;aG%Y5spPT7U5WgV-b!;I2PepgkuqoMK~7WScGE{jzu_T?v*1P8{yap$3{5zn%S8V%m`)#GlChx9KjsH9KjsH9Kk$-c?9za<`K-s=SMI<g8325k6?Z@^WR^KJpMwe*XQXr!#aaF2YpVCGYDn`GskW@&meXocA4iDu`6O%^sf1wLAZf%<2aLb2C)mV3$ZI=SH!O9UFVz;IU{mL<c!D}kuxG^M9zqu5jh*5BXW+&IU?sAUz40?5IhJT1P_8If+vC}g2!C15j-P!M(~X0`TL%G{AFct#}N0^WhUzkVi#f;Vpqhjh+WaU<~W1M8Idz0XGG43oDn%Aaz^Bg$QhAyM9vX8N926z%;OA#2f>5jLGVQIMDRrLnCmryX9Uj(p3yw7&O~%3qB9YliRes3XCgWi(V2+OM06&iGZCGM=uAXsB03Y%nTXCrbS9!R5uJ(XOhjiQIup^Eh|WZGCZaPDor&m7L}wy86VaK7&O~%3qB9YliReu8Iy0g(BRVspGmkT~&LDUYJO~~HPXtc{PXtc{&j_9oJR^8U^PC++IEHWx;TXa(gkuQD5RM@nLpX+T4B;5UF@$3X#}JMo978x3;aG%Y5spPT7U5WgV-b!;I2PepgkuqoMK~7WScGE{jzu_T?v*1P8{yap$3{3d$FD`6XAsN?W&|^W8NnRE9KjsH9KjsHJc4-y^9be<%*N+OFh7F%5zLQZel+v(`y&7OR)oJ^qKFypGl+Be$vHXAAea%%ubE{RVi#hUd0r8_B6j5`yXNqHK)V|VH_kJ;&meXob|H2}?26cxpX@s3jK~?0Ga_e1&WM~5IU{mL<c!GK_#BaQM9vX8zh)L51P_7-!Gqw5;ECXg;4#;01kVVb5j^t~p6Bp=K$p%$+)vk;+-DHG5W5h&B6daW%1?I9X$FxqB4<R-h@25QBXUOMjK~?0Ga~1RoFj6M$obrvoPW7f<w5Wucn~}hJP|w*Jmz|h;2FU)f@glh^BlepXzxr!XCgWi(V2+OM06&iGZCGM=uAXsB03Y%nTXCrbS9!R5uJ(XOhjiQIup^Eh|WZGCZaPDor&m7L}wy86VaK7&O~%3qB9YliRes3XCgWi(V6CTW<+O3bY?_no@eGhgWy5%Ab1cw5j+t*5j+t*BX~yejNqA{@EjdOIEHWx;TXa(gkuQD5RM@nLpX+T4B;5UF@$3X#}JMo978x3;aG%Y5spPT7U5WgV-b!;I2PepgkuqoMK~7WScGE{jzu_T?v*1P8{yap$3{5znpv0;%m`)#GlChx9KjsH9KjsH9Kk$-c?9za<`K-s=SMI<g8325k6?a&!u-d_`>XG7M?AgXd!AvLL7c-6&dF&8!Hi&j&1}06yAZp~^NQFNu`55=_4(fW``c8GJP0?AGg)R3yAZn&yCQZ)?8*;z9dkzHjK~?0Ga_e1&WM~5IU{mL<ZOJ7$T=eCh@4+D8xMj9!GqvI@I>%L@I>&K>otOB1kVVb`2o-8J$JpIBJQW_OqLnMF2pXxu83U`yYhowbDBZqjK~?0Ga_e1&WM~5IU{mL<c!EUBIk&lBXT}>Cg)%7)Oip*2p$Aa1WyD{1dq91BX~yejNq9c@Vq(`(V2+OM06&iGZCGM=uAXsB03Y%nTXCrbS9!R5uJ(XOhjiQIup^Eh|WZGCZaPDor&m7L}wy86VaK7&O~%3qB9YliRes3XCgWi(V2+OM06&iGtKMFh|Y}Y%!tlB&df4{;6d;pcn~}hJP|w*JP|x2ct-Gy;F%xr934YAhHwnw7{W1xV+h9(jv*XFIEHWx;TXa(gkuQD5RM@nLpT=UScGE{jzu^Y;aG%Y5spPT7U5WgV-b!;I2PepgkuqoML1^el_MM*;n)brMmYAG*_aW`2xbH`f*HXa!5qOH!5qOH!90R_1oH^y5zNNtM=(Ev`4P;IV19nU{Kx5Mb-sQ_)1P97Wd?B$KR74H83Z$enNznMXArv(yUg>7*cGuWKiD;=pGmm7fpFtIlVt|63$Y8aD`Ho~uKZxvIcG%9h@25QBXUOMjK~?0Ga_e1&c^46oFj6M$T_FiB*z&94}u55gW!qaiQtLgG1qGZ&j_9oJo5vd=kzlPFP(|FpKdc*W)Qm&yAZn~c17&U4|dIQ29Yx&XGG43oDn%Aaz^Bg$Qh9{BIk&lBXW+&`P`Wtf1q0DLGU1W5Ihk)5j+t*=6a3b8NoAxXMVu*oPH+Z+L?&XM06&iGZCGM=uAXsB03Y%nTXCrbS9!R5uJ(XOhjiQIup^Eh|WZGCZaPDor&m7L}wy86VaK7&O~%3qB9YliRes3XCgWi(V2+OM06&iGtKMFh|Y}Y%!tlB&&)D|;6d;pcn~}hJP|w*JP|x2ct-Gy;F%xroE<|rhHwnw7{W1xV+h9(jv*XFIEHWx;TXa(gkuQD5RM@nLpT=UScGE{jzu^Y;aG%Y5spPT7U5WgV-b!;I2PepgkuqoML1^el_MM*;n)brMmRR7uSFhb5X=Z>1T%se!5qOH!5qOH!5qOnf_Vh<2<8#Y#^*;cKZ5xY%#UDxe!%?swaE92+0*;I=NYyc#5wqLa+*OfBbZ+^>n_AD#4hu^B6daWir@A5-uwGS=#dBE#&IUw3}P2z7h+e$u83XnyN)>{az^Bg$Qh9{B4<R-h@25QBXTxAN8}ulb41RsnUx2@gWy5%Ab28pB6uQr%=H?<GlFLX&v>5Cd+vTeMchxfnQSwNU5H(XT@kw?cE#_S(+nbKM9zqu5ji7rM&yjh8Idz0XGG2sIY;Cik@KZ9k244!1P_7-!4ts~!4tt_uGa{j5j-P!#`C;76VaK7&O~%3qB9YliRes3XCgWi(V2+OM06&iGZCGM=uAXsB03Y%nTXCrbS9!R5uJ(XOhjiQIup^Eh|WZGCZaPDor&m7L}wy86VaK7&O~%3qBG6w%!tm6=*)=DJkHEEgWy5%Ab1cw5j+t*5j+t*BX~yejNlp1b94;h7{W1xV+h9(jv*XFIEHWx;TXa(gkuQD5RM@nLpX+T4B=RWV-b!;I2PepgkuqoMK~7WScGE{jzu^Y;aG%Y5spPT7U7t=SB`LOgkvKd8{yb%W@Sb&BbX7)2xbIx1aky)1aky)1oH^y5zHf)M=%?oAHn<x=0`9;g8A{xe}66V{ZrshpQqal+YI6y{5d(!Aea%%9J}Q>gV=@GWu8~Wu83XnyXJES;ReEu<4m?0#4f}x#IA^45xe4dopVOyjK~?0Ga_e1&WM~5IU{mL<ZOJ7$T=eCh@5kLO>&$;@E~{)JP4i$o(P@@9&^1$@QmOY!84xc?|bh1Cj=fHL)=f7nQSwNU5H(XT@kw?cE#_S;|wBaM9zqu5ji7rM&yjh8Idz0XGG2sIY;Cik@KZ9PcsM}1P_7-!4ts~!4tt_uGa{j5j-P!#`C;76VaK7&O~%3qB9YliRes3XCgWi(V2+OM06&iGZCGM=uAXsB03Y%nTXCrbS9!R5uJ(XOhjiQIup^Eh|WZGCZaPDor&m7L}wy86VaK7&O~%3qBG6w%!tm6=*)=DJkHEEgWy5%Ab1cw5j+t*5j+t*BX~yejNlp1b9M~j7{W1xV+h9(jv*XFIEHWx;TXa(gkuQD5RM@nLpX+T4B=RWV-b!;I2PepgkuqoMK~7WScGE{jzu^Y;aG%Y5spPT7U7t=SB`LOgkvKd8{ya-zZQ9%K`<kj5zGi?1aky)1aky)1ak!Q2<8#YBbY}p8=oJ+{0QbpFh7F%@y!4IwaEWr|F6l9?~(iG+Y!nH%LMfd<QX|lP)Vtz?|-m;ouF=^Zt2e@bxZ1&$Sw0RLB0CatACovGC|!!-9p`xx+Qf><d$Qm)J&<FQZuDyO3jp-DK%4SrqoQkr>U8yW}2F5UO&6$Izi>2a!@&_9H|_s9H|`rx=iJm$}yE=B**i6f_k5$-sf%;Sth7ks9UI8Qn#dTiQF=$32LU)OsSbtGo@xq&6JucHB)M))J#(|P0chl(@WERpP+J3Ij9^|j#Q3Rj#Q3*U8ZtO<(SGblH;@Ks7*(0I%?BVn~vIa)TX009kuDGO-F4yYSU4hj@oq8rlU3;wdtr$M{PQ4(@~p_+H};Wqc$D2>8MRdZ8~bxQJaq1bkwG!HXXI;s7*(0I%?BVo36j6OKrN;rb}(Q)5I(jR1PW!m4nKW%8|;E%8|-3m18Q$RF07xM}w#aQ4OLRL^X(N5Y-^6K~#gN22l;78bmdSY7o^RszFqPs0O7Plxk3_L8%6%8kA~KszIp+r5coKP^v+x2BjL5YEY^{sRs4C*i?h28Z_0QsRn&aY@}3DDk+teN=hY7B~2wwB~2wwC7nt-m2@iURMPJ0Q%Rpn`c%@Vl0K63kJDF1-rxMzCb&;f&%mCM(*%{2O8WYz!Pg1u7V4J%TvE5BZi(G8hj)vYt53c9$BEo0s9UI8s9RFEq;84ba?F&PDK%4SrqoQSnNl;QW=hSJnrZhmHPh5gQ!{=2`uOVvm4nJb<)Ct;a-?#ka`fvmm18Q$RF1J6&*9zTOVd&BbJvO7C#YMfTc}%7x1?@~-7=>MYNpgoshLtUrDjUal$t3uQ);HvOj9#W%``RBbJKmFpmI<-s2o&|RE|`RRE~aKrgBW>n94Dh<2k%ryfhuP>8MRdZ8~bxQJaq1bkwG!HXXI;s7*(0I%?BVn~vIa)TX009kuDGO-F4yYSU4hj@oq8rlU3;wdtr$M{PQ4(@~p_+H};Wqc$D2>8MRdZMy!NF16`Wn=ZBKjuUgApmI<-s2o&|RE|`RRE|`RsT@-|rgDtsI2uGXh-whkAgV!BgQx~k4Wb%EHHc~u)gY=tRD-AnQ4OLRL^UYYpj3lW4N5gA)u2>^QVmKqDAk};gHjDjH7M1fRD)6tN;Rn8#iklG)u5>cO*QCaVj-oHQc0<#R8lHwDrqWdDrqWdD(O_xsiad$r;>J0pGx{v(x;L>mGrTse|&wv@bkso@Bh~(SSF}vAkWBQf=WsyegEqE`vi3hbxVIPsasOFL~i+bxA^mg*fCS;)jv&SnV@c=ZlP{T-IBT`a?2@GYNpgoshLtUrDjUal$t3uQ);H&)6`5;GfmC({fo-)6I2c=2bF`$k;;+Ek;>7p%T$i398)<)a(vtg_xl|6K6jnSGC|!!-9p`xx+Qf><d!*1P&1`wO3jp-DK%4SrqoQSnNl;QW}2F5YNn}~UYhPOLFJ%wP&ud^sT`>ssT}>fOy!u$F_mK^$7j<~n~vIa)TX009kuDGO-F4yYSU4hj@oq8rlU3;wdtr$M{PQ4(@~p_+H};Wqc$D2>8MRdZ8~bxQJaq1bkwG!HXXI;s7*(0I%?BVn~vIa)TX00U4KoN+H|Q+m)dlviCHG798?Y}2bCk0Bb6hSBb8$+$5f7~93weS22l;78bmdSY7o^RszFqPs0L9Dq8dash-whkAgV!BgQx~k4N5gA)u2>^QVmKqDAk};gHjDjH7M1fRD)6tN;N3epj3lW4eEEXsRm6oXsSU|4f>qeNU5Y$QYtBxluDXPno62Vno62VI+b)P=~U9Gq}|h}l0KF6siaROeI)7Wt6u+nXXWpo+qh3~ouHn9J|l+-Dk+up^-I#P6Vxr#E&aKqZb{t|y=A_?TfAL;>eW9^<T^p!Lft~$lDZ{zOZ1jgrqoQSnNl;QW=hSJnkh9?YNpgoyQis{re>O&>FZZwUni&>R1PW!l_QlSl_Qm-Uze#IQ#qz`jOKX0zgv81I_iDyK9TDLbqjS1bxZ1&)Gg6l<}g9cl$t3uQ);HvOsSbtGo@xq&6JvHYNn}~re=C>y6+QI4k`zggUXT0k;;+E(XY!?j;S0|IYx6l-`_3XnvU9Z)TX009kuDGO-F4yYSU4hj@oq8rlU3;wdtr$M{PQ4(@~p_+H};Wqc$D2>8MRdZ8~bxQJaq1bkwG!HXXI;s7*(0I%?BVn~vIa)TX00U4KoN+H|Q+m)dm4iMdWtIj9^|4k||~M=D1uM=Hluj;S0|IYx7w45AuDHHc~u)gY=tRD-AnQ4OLRL^X(N5Y-^6K~#gN22l;78kA~KszIp+r5coKP^v+x2BjL5YEY^{sRpGQlxk3_L8%6%8r1J%Qw^GG&{Tt_8uU4FC#8~7NvWh%QYvXGX)0+dX)0+d=~U9Gq*F<!l6Fs@O8QjNr;<LE^wFeWf3MfKpAYc;eaqtn_X+A5*fVmNppsHazyGe&%LH``bxVIPsasOF#BTX`xA^_N{Ra-})#vg%iZ2t?Ez~X4EvZ{lx5REaWlGJInkh9?YNpgoshLtUrDjUaw0oMGX=<janSTEbw3i7g2bF`$LFGv0NaaZ7=+|W`$5f7~9Ah~??u6@oj(VTFPvky9-9p_$-IBT`bxZ7)IZRM9rDjUal$t3uQ);HvOsSbtGo@ylnrUjLshOUe?l3{+pmI<-s2r&rsT`>s{klx$n94DgV=TvK(@~p_+H};Wqc$D2>8MRdZ8~bxQJaq1bkwG!HXXI;s7*(0I%?BVn~vIa)TX009kuDGO-F4yYSU4hj@oq8rlU3;wdtr$M{PQ4(@~p_+H};Wqc&ZCO_$nqsZE#Kbf<~APf$6i98?Y}M=D1uM=D1u$5f7~98)>Qa-0mJ8bmdSY7o^RszFqPs0L9Dq8dash-whkAgV!BgQx~k4Wb&9YEY^{sRpGQlxk3_L8%6%8kA~KszIp+r5coKP^v+x2BjL*?_yI8nrhHggQgnvIkAvZNvWh%QYtBxG?g@!G?g@!G?jEJ=~U9Gq*F<|r%xq)D(O>6pGx{z(!amz_0QW{uist&`@7N(6R+=UyiW8pa+=`yeV*3|>cqB%x`n!>KbO=ksaqnq%xi*g*EY+<IS=Z!rC!^w6RBHLw?u9^=CL|Pb&Tp5)iJ6;RD-AnQ4PWwl$uy-VyTJc_}$ls2`UGbgUUhWNZryio%&p+ZkhUAMsocAPT_yv2)usoQ+xgU#M|WC1a+csnbXAObDw&Dq26Dp%};H9YV%W@|I0+`vrT=rm(R-Y6Vxr#EsH^y&&ux;Q#qz`OywBK@&1gWe!fsY8>pWR)XxU$X9LxBs_RsfsU}lBrFu&Bl<FzfLaK#S3#pFv*3LJ_W|=rUmTJ(~iSy^n_lYCv>e%;*StiaFraJa@V(J-FNtb84TA1oss$;2+#ThhPOMRc%&R86q<4=D%Ogxq2^|MUA{w?YC4_4{~_X+A5*fVmPppsHaIlcRJn4oT<Zt2e@bxZ1&*e!E-jk{ib>eW9?<UT>&Lft~$lDZ{zOYD|orqoQSnNl;QW=hSJnkh9?YNpgoyQis{re>O&X-@BaA10_AR1PW!l_QlSl_Qm-Uze#IQ#qz`jOBO^fA_dF9rZqUoydKHx`n!hx+Qf>>Xz6obDE%LO3jp-DK%4SrqoQSnNl;QW=hR8HPh5gQ!_m`-S-J92bF`$LFGv0NaaZ7=+|W`$5f7~9Ai12!{30{rlU3;wdtr$M{PQ4(@~p_+H};Wqc$D2>8MRdZ8~bxQJaq1bkwG!HXXI;s7*(0I%?BVn~vIa)TX009kuDGO-F4yYSU4hj@oq8rlU3;wdtr$*I(16HeG7dr8eDRV(t@E4k`zggUXT0k;;+Ek;*ZZV=Bi~j<Fm^gQx~k4Wb%EHHc~u)gY=tRD-AnQ4OLRL^X(N5Y-^6K~#gN2BjL5YEY^{sRpGQlxk3_L8%6%8kA~KszIp+r5coKP^v+x2KBqxRD-4(G}WM~2F>YTbsi?Dq*PKWDV3B;no62Vno62Vno2sAbSmjo(y64~)2EU?mGr5kPbGaU=^y`ky-qy5F1$|scD+sXGjf`Ez5Zwu)QM#abqjS%e=ez8Qn$oznb!n|SM=A3OCHo~OTD%nUX8a2>O|ji%wu(o>KN5As$*1xs0L9Dq8fxVC^fOv#8MM`y{5ZPP&ud^R1PXf>Xx4A)aNpF%hcyGmgD)?s|)U*`_x|lKJhmBIzgT2Tjn%z{@kbDU#RyNYV%W@pW6J?=Kng8`fO95?fJ9v`vi3hb<1YZ`Lpu-#8i%{98)>Qa=bsIsGl#?&j#ve1NF0k`q@Bro$5N(WU9$jPpO_#J*9d|wUBBd)k3Ocy|r_Acl0`OaV*uK9Nv{|6Gzh3u^iqnyiQy!Om!@W_t@G*>csKct`?>`mg-olV{rz})>1jV?{J;i9DBVZaGiK6$KQXy{r^=$i|P"
+_POOL_BLOB = b"c-oCvTax2A4Eyi1<U^FG*WCYLYXKnbOea%YscJit_yR$SY5!AR=hI$>PkU8-&i8uOfBZUOSo!k2P8f7peyTo4-=#56v|lGGP8=N#8VkP1i4yylj{c`Wqw9oY*Wt10JuDQg`kRa^x`OvAe~UCkJRw709J2n~Uwk}1l5xcw@0RbL?{TWU$=v(5be_ERK!&l`e3pE+d|Ey!<H}f5#DQB8(k=_1WNzPxpX;RKY-kCYCaf&85i+-L!JK!QJ91Y(o1!d<N8lD&ubIJ{2X{_m#ouIZ?pQL&wNu`B5MKEMw>vAIm;~|$nTX@Yz?H+AmWnKS%KVMdCoG@1Wv*WTlM#@)J*rtNEh|UbZ`+s5zazg9dSY<<kx{1Q`jF1-LdM0~s(jyl=C)fEXMvp$Z2vbJkZH<$;A0OvO;MKQNc&mp2lHAR*J_uC{rYBDj|@-j4LnWS2VxyKb@X(s8J<VaOuOS+o6vKfL(IJN$b)0=oSo_z=RA>|@}xl0728zbqn`uo$FqjLu1E*`q~(T_>{ktXkDkj8JQ#?zzjY_d4M;K;V%_!Ea%bv|tCX#XqRBQj#ZJ$xLGow+2`(Kh7fv;uU05S;2cjev3-O(2OJ*Ng#vlD{AX3MA$9MYAj4pg{utIIb&mR%d=OrH<XI5q%dx&hlB9A9)3*TL+7I9!9?j`Hw@sVKE4j+Tt4H@dNw4i$_o&sycFfs$A(#Me)&ScIICQJGPp+IZM23gdFL6NQs4Nce)uLTcHsEw@4C7ngJuw>_)DCy%Aj$}UTYd|wIIUc$fP@CCfx-=J9BhRX8V&Hs-epcDSUU)OG>*@<U)gMeL4;-ghzOn|Za?Pl^7}tbu@XNIBS<y?f9bPYBMT;$CX<DC<ZbFpZW~s9zo6^UXdb+x57XvEvO!d|V>!!Wv5(c@Ieba$_^tzS^TQZ+WR%x8tDd|U*zB|`FtGekvF5p`gj_eXE?~blY@9G;%ENYJoSLL$G)<i@lI~27pb^4wRslqmKl8*~fL_VTsOdZ0LS4~;B)E#xfyP@iCpuVXdT@~?4uU(PFJ$bW|n9R(-3CHM%Q#lWAGat<CgqIfmAgj+66ZgAvO7^$RgeeD0H$zjTflM%`2}RGz@!TSxee7AeLwzl}ilvY2I-a->^+A(t_-I1LRSzYRH~CMyO$?o4L9z-yuAB$DGB&e*?^|N2%3}uQjT^kG*_Ueejgei2oqK7f=&z{LyT0RI=6rtF)#0Pr<1#eR!jAPFNW<E-v_+t%G7t!7!!^U8t_wtYaZHu06?nAeM^$Dv%rV2J*3VpQ<!lPM&HbX*?eyTxgj>^JaG*c#Hj9h!9NMBJTk0YlCE|}uX~Iq8gbY3wk=)_d676?3Sql_`k5+VMMOa1iN!(UjTx$V!Q9;*?Z%2IW;g&rXrlPoZCcaZyOeKP*D_R;>YKnR@YAxcw8|GmAU7d5P(_)GCw$R|^Fv2qHZ}aTRL7_zQNV4@dV@{skk%5vmv~{ajq)vHgIi^yPmF&MeE1gr$4yWufrmcGvr@|faTT%EuNg#LPa@xAI8s43NEd5@Xuvj$j82xn(bx!SDGYC6+*S*qc#R1&PK`{816;^X1A#snH_?@tI`w#v1VQDrHEmgvT#d&RzTZ{3Fv^%F4Q{j%+ug&L?$L0qGcXR!<SwCyvpSAbT+U>LU^;x@r)c%k7zv%hm%$JD1!14v#&pv(&^b1;FApe}VA8XnF`?LSqMY8y>h#9Q8u4Ch5i6&_{QKNHjP5M)FtFfc)b8e7yyoO0yviw+sXO_SJJepOf4YaSSAAjiGM*BEgQ7W8UkJy0g_L!)x;0OjW-mMm68-8+`oWPB0Y_zCz_Aq+SUjWooqjfno@m?v>laP9gW;irWqS0^=ymsn;wxsaO"
+_EQ_CACHE = None
+_POOL_CACHE = None
+
+
+def etp_equation(i):
+    """Text of ETP equation i, 1-based, operator already the diamond."""
+    global _EQ_CACHE
+    if _EQ_CACHE is None:
+        import zlib as _z
+        import base64 as _b
+        text = _z.decompress(_b.b85decode(_EQ_BLOB)).decode("utf-8")
+        _EQ_CACHE = text.split(chr(10))
+    return _EQ_CACHE[i - 1] if 1 <= i <= len(_EQ_CACHE) else None
+
+
+def magma_pool():
+    """Curated finite magmas from the project data. They refute implications
+    whose smallest counterexample is larger than any local search reaches."""
+    global _POOL_CACHE
+    if _POOL_CACHE is None:
+        import zlib as _z
+        import base64 as _b
+        _POOL_CACHE = []
+        text = _z.decompress(_b.b85decode(_POOL_BLOB)).decode()
+        for line in text.split(chr(10)):
+            if not line:
+                continue
+            head, _, rest = line.partition(":")
+            n = int(head)
+            flat = [int(v) for v in rest.split(",")]
+            _POOL_CACHE.append((n, [flat[i * n:(i + 1) * n] for i in range(n)]))
+    return _POOL_CACHE
+
+
+def problem_ids(problem):
+    """The two equation numbers of a problem, or None."""
+    ids = []
+    for key in ("eq1_id", "equation1_id", "eq2_id", "equation2_id"):
+        val = problem.get(key)
+        if val is None:
+            continue
+        m = re.search(r"(\d+)", str(val))
+        if m:
+            ids.append(int(m.group(1)))
+    if len(ids) < 2:
+        return None
+    return ids[0], ids[-1]
+
+
 def etp_verdict(problem):
     """0 unknown, 1 true, 2 false, 3 conjectured false, for 1-based ids."""
     try:
-        ids = []
-        for key in ("eq1_id", "equation1_id", "eq2_id", "equation2_id"):
-            val = problem.get(key)
-            if val is None:
-                continue
-            m = re.search(r"(\d+)", str(val))
-            if m:
-                ids.append(int(m.group(1)))
-        if len(ids) < 2:
+        pair = problem_ids(problem)
+        if pair is None:
             return 0
-        a, b = ids[0], ids[-1]
+        a, b = pair
         if not (1 <= a <= _ETP_N and 1 <= b <= _ETP_N):
             return 0
         cls, packed, ncls = _etp_tables()
@@ -286,6 +330,20 @@ def search_random(eq1, eq2, n, deadline, samples):
         if holds(eq1, n, op) and violated(eq2, n, op):
             return table
     return None
+
+
+def pool_counterexample(eq1, eq2):
+    """Try the curated magmas before any search. Each is checked exactly the
+    same way as a searched table, so a hit is a verified certificate."""
+    for n, table in magma_pool():
+        op = table.__getitem__
+        try:
+            if holds(eq1, n, lambda a, b, t=table: t[a][b]) and \
+                    violated(eq2, n, lambda a, b, t=table: t[a][b]):
+                return n, table
+        except Exception:
+            continue
+    return None, None
 
 
 def find_counterexample(eq1, eq2, budget_s):
@@ -658,6 +716,108 @@ def lemma_prove(eq1_text, eq2_text, budget_s=120):
     return "\n".join(lines)
 
 
+
+
+def route_candidates(problem, limit=14):
+    """Equations that sit between the hypothesis and the goal: every m with
+    eq1 implies m and m implies eq2, both settled true in the table. Sorted
+    by statement length, because short laws have short proofs."""
+    pair = problem_ids(problem)
+    if pair is None:
+        return []
+    a, b = pair
+    try:
+        cls, packed, ncls = _etp_tables()
+    except Exception:
+        return []
+
+    def implies(x, y):
+        pos = cls[x - 1] * ncls + cls[y - 1]
+        return ((packed[pos >> 2] >> ((pos & 3) * 2)) & 3) == 1
+
+    if not implies(a, b):
+        return []
+    reps = {}
+    for eq in range(1, _ETP_N + 1):
+        reps.setdefault(cls[eq - 1], eq)
+    mids = []
+    for mid in reps.values():
+        if cls[mid - 1] in (cls[a - 1], cls[b - 1]):
+            continue
+        if implies(a, mid) and implies(mid, b):
+            text = etp_equation(mid)
+            if text:
+                mids.append((len(text), mid, text))
+    mids.sort()
+    return [(mid, text) for _, mid, text in mids[:limit]]
+
+
+def prove_leg(from_text, to_text, budget_s):
+    """Prove one implication with the whole deterministic stack."""
+    body = collapse_proof(from_text, to_text)
+    if body is not None:
+        return body
+    try:
+        body = rewrite_prove(from_text, to_text, budget_s=budget_s * 0.6)
+    except Exception:
+        body = None
+    if body is not None:
+        return body
+    try:
+        return lemma_prove(from_text, to_text, budget_s=budget_s * 0.4)
+    except Exception:
+        return None
+
+
+def _intro_vars(body):
+    """The variables a proof body introduces, in its own order."""
+    first = body.split(chr(10), 1)[0].strip()
+    if first.startswith("intro "):
+        return first[6:].split()
+    return []
+
+
+def routed_prove(problem, budget_s=90):
+    """Prove the goal by routing through an intermediate law. The middle law
+    is proved from the hypothesis and emitted as a have block, then the goal
+    is derived from hypothesis plus that lemma. The judge only ever sees
+    ordinary rewriting; the table just chose the waypoint."""
+    eq1_text = normalize(problem["equation1"])
+    eq2_text = normalize(problem["equation2"])
+    deadline = time.monotonic() + budget_s
+    cands = route_candidates(problem)
+    if not cands:
+        return None
+    h_rule = build_rule("h", eq1_text)
+
+    for mid, raw in cands:
+        if time.monotonic() > deadline:
+            return None
+        mid_text = normalize(raw)
+        share = max(6.0, (deadline - time.monotonic()) / max(2, len(cands)))
+        leg = prove_leg(eq1_text, mid_text, share)
+        if leg is None:
+            continue
+        binder = _intro_vars(leg)
+        m_rule = build_rule("m", mid_text)
+        if sorted(binder) != sorted(m_rule[1]):
+            continue
+        found = _rewrite_search([h_rule, m_rule], eq2_text,
+                                min(deadline, time.monotonic() + share),
+                                5, 40000, compound_fills=True)
+        if found is None:
+            continue
+        g_vars, steps = found
+        lines = [f"intro {' '.join(g_vars)}"] if g_vars else []
+        head = (f"have m : {chr(8704)} {' '.join(binder)} : G, {mid_text}"
+                f" := by") if binder else f"have m : {mid_text} := by"
+        lines.append(head)
+        lines.extend("  " + l for l in leg.split(chr(10)))
+        lines.append(f"rw [{', '.join(steps)}]" if steps else "rfl")
+        return chr(10).join(lines)
+    return None
+
+
 # -- deterministic solve shared by both tracks -----------------------------
 
 def solve_deterministic(problem, budget_s):
@@ -672,8 +832,10 @@ def solve_deterministic(problem, budget_s):
     known = etp_verdict(problem)
 
     if known != 1:
-        # Not a known true: hunt the counterexample. A known false gets the
-        # whole budget here because no proof search can succeed.
+        # Not a known true: the curated magmas are free, then the search.
+        n, table = pool_counterexample(eq1, eq2)
+        if n is not None:
+            return "false", make_false_code(n, table)
         ce_budget = budget_s * (0.9 if known in (2, 3) else 0.7)
         n, table = find_counterexample(eq1, eq2, ce_budget)
         if n is not None:
@@ -694,12 +856,16 @@ def solve_deterministic(problem, budget_s):
     if body is not None:
         return "true", make_true_code(body)
     if known == 1:
-        try:
-            body = lemma_prove(eq1_text, eq2_text, budget_s=budget_s * 0.35)
-        except Exception:
-            body = None
-        if body is not None:
-            return "true", make_true_code(body)
+        for prover in (
+            lambda: lemma_prove(eq1_text, eq2_text, budget_s=budget_s * 0.25),
+            lambda: routed_prove(problem, budget_s=budget_s * 0.2),
+        ):
+            try:
+                body = prover()
+            except Exception:
+                body = None
+            if body is not None:
+                return "true", make_true_code(body)
     return None
 
 
@@ -716,6 +882,18 @@ def build_analysis(problem, solved_false):
         notes.append("No counterexample exists up to Fin 4, so this is almost certainly TRUE.")
     if collapse_proof(problem["equation1"], problem["equation2"]):
         notes.append("The hypothesis collapses every element to one value.")
+    if known == 1:
+        # Waypoints: laws that follow from h and imply the goal. Proving one
+        # of them first is usually far easier than attacking the goal whole.
+        try:
+            cands = route_candidates(problem, limit=6)
+        except Exception:
+            cands = []
+        if cands:
+            listed = "; ".join(f"Equation{mid}: {text}" for mid, text in cands)
+            notes.append("Each of these laws follows from h and implies the "
+                         "goal, so proving one first then finishing from it "
+                         "is a good route: " + listed + ".")
     return "Solver analysis: " + (" ".join(notes) if notes else "no deterministic shortcut found.")
 
 
