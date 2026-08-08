@@ -1084,6 +1084,16 @@ def run_solo():
                 n2 = None
             if n2 is not None and offer("false", make_false_code(n2, tbl2)):
                 return True
+            # Last resort for a known false that resisted every stage: a
+            # full order 5 backtracking pass. This only ever runs in the
+            # escalation path, where the budget is otherwise idle.
+            try:
+                tbl3 = search_backtrack(eq1, eq2, 5,
+                                        time.monotonic() + 420)
+            except Exception:
+                tbl3 = None
+            if tbl3 is not None and offer("false", make_false_code(5, tbl3)):
+                return True
             return False
         for prover in (
             lambda: rewrite_prove(problem["equation1"], problem["equation2"],
