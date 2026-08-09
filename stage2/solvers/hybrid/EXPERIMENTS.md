@@ -27,6 +27,7 @@ approach is retried in the same form.
 | Two-level saturation, conditional with budget reshuffle | 125/200 | Phase budget changes hurt the fast path |
 | Runtime quadratic magma search | 126/200 | Witness overlap with pool; budget slice starved other stages |
 | Pool additions at orders 9 to 12 | 123/200 | Scan cost grows as order to the fourth power; pool sweet spot is orders 3 to 8 |
+| Defer large tables for judge safety | 128/200 | Measured the real cost first: across 103 emitted false certificates the worst Lean decide was 2,197 cases, far under the judge limit, so the deferral only lost winning certificates for no benefit |
 
 ## Playground validation, all eight sets
 
