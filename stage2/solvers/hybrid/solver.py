@@ -1094,6 +1094,22 @@ def run_solo():
                 tbl3 = None
             if tbl3 is not None and offer("false", make_false_code(5, tbl3)):
                 return True
+            # Uncapped pool scan: the wide tables that the budget slice
+            # skips during normal solving get their chance here.
+            try:
+                n4, tbl4 = pool_counterexample(eq1, eq2, budget_s=240.0)
+            except Exception:
+                n4 = None
+            if n4 is not None and offer("false", make_false_code(n4, tbl4)):
+                return True
+            # Broad random hunt at order six as the final cast of the net.
+            try:
+                tbl5 = search_random(eq1, eq2, 6,
+                                     time.monotonic() + 240, 800000)
+            except Exception:
+                tbl5 = None
+            if tbl5 is not None and offer("false", make_false_code(6, tbl5)):
+                return True
             return False
         for prover in (
             lambda: rewrite_prove(problem["equation1"], problem["equation2"],
