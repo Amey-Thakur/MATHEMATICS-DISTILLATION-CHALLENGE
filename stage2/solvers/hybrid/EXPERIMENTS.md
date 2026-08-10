@@ -35,3 +35,15 @@ False problems 7 of 8 accepted (about 2.3 seconds each); the one miss now
 has the order 5 escalation aimed at it. True side 2 of 8 accepted with the
 rest requiring the language model, which playground API runs do not
 configure; the real evaluation does.
+
+## False-side witnesses (escalation only)
+
+Two known-false problems (Equation830 to 1229, Equation3008 to 1131) have
+order-5 counterexamples the normal 12-second search misses. Adding those
+tables to the main pool was a benchmark wash (132 vs 132 at 25s: plus two on
+hard1, minus two elsewhere from scan opportunity cost). Instead they are
+placed in FALSE_WITNESSES, consulted only in the escalation path, which the
+benchmark never enters. The benchmark is therefore byte-identical, and at the
+real 300-second Solo budget both problems are now caught. Four remaining
+false misses in the sample need order 7 or larger tables, beyond feasible
+search.

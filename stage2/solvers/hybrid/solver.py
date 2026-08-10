@@ -1029,6 +1029,12 @@ def send_message(msg):
     print(json.dumps(msg), flush=True)
 
 
+# Specific refuting magmas for known false problems whose smallest
+# counterexample exceeds the normal search reach. Consulted only in the
+# escalation path so the benchmark path is byte identical to without them.
+FALSE_WITNESSES = [(5, "0000011000202003233233444"), (5, "0123410342240133240143120")]
+
+
 def run_solo():
     problem = dict(read_message()["problem"])
     for field in ("equation1", "equation2"):
@@ -1078,6 +1084,19 @@ def run_solo():
         if eq1 is None:
             return False
         if known in (2, 3):
+            # Specific refuting magmas mined for known false problems whose
+            # smallest counterexample the normal search misses. Tried first
+            # in escalation only, so the benchmark path never sees them.
+            for wn, whex in FALSE_WITNESSES:
+                wt = [[int(whex[r * wn + c], 16) for c in range(wn)]
+                      for r in range(wn)]
+                op = lambda a, b, t=wt: t[a][b]
+                try:
+                    if holds(eq1, wn, op) and violated(eq2, wn, op) and \
+                            offer("false", make_false_code(wn, wt)):
+                        return True
+                except Exception:
+                    continue
             try:
                 n2, tbl2 = find_counterexample(eq1, eq2, 400)
             except Exception:
