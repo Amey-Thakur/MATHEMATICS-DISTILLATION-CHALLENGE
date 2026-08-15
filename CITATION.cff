@@ -1,4 +1,4 @@
-﻿cff-version: 1.2.0
+cff-version: 1.2.0
 message: "If you use this equational logic distillation research, please cite it as below."
 authors:
 - family-names: "Thakur"
@@ -7,4 +7,12 @@ authors:
 title: "SAIR Mathematics Distillation Challenge: Magma Equational Reasoning"
 version: 1.0.0
 date-released: 2026-03-31
-url: "https://github.com/Amey-Thakur/MATHEMATICS-DISTILLATION-CHALLENGE"
+url: "https://github.com/Amey-Thakur/SAIR-MATHEMATICS-DISTILLATION-CHALLENGE"
+repository-code: "https://github.com/Amey-Thakur/SAIR-MATHEMATICS-DISTILLATION-CHALLENGE"
+license: CC-BY-4.0
+keywords:
+  - equational theories
+  - magma
+  - automated theorem proving
+  - Lean 4
+  - knowledge distillation

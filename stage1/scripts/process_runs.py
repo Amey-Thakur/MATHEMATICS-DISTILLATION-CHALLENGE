@@ -3,7 +3,7 @@ import os
 
 # Dynamic Path Resolution for Portability
 script_dir = os.path.dirname(os.path.abspath(__file__))
-runs_path = os.path.join(script_dir, "..", "Source Repositories", "equational-theories-benchmark", "data", "runs.jsonl")
+runs_path = os.path.join(script_dir, "..", "sources", "equational-theories-benchmark", "data", "runs.jsonl")
 
 print("Analyzing Model Failures (Sampling first 100,000 runs)...")
 print("-" * 50)
