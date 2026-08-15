@@ -1,8 +1,5 @@
 <div align="center">
 
-<img src=".github/social-preview.png" alt="SAIR Mathematics Distillation Challenge, Equational Theories, Stage 1 and Stage 2" width="100%">
-
-<br>
 <br>
 
 # SAIR Mathematics Distillation Challenge
@@ -31,6 +28,8 @@ check, rather than a claim a person has to trust?
 [![License](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey)](LICENSE)
 
 <br>
+
+<img src=".github/social-preview.png" alt="SAIR Mathematics Distillation Challenge: Equational Theories, Stage 1 and Stage 2, distil then prove and verify in Lean 4" width="100%">
 
 </div>
 
