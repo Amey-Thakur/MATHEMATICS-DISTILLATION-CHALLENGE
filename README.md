@@ -72,22 +72,18 @@ co-founder of the SAIR Foundation), and the SAIR Foundation.
 ## The two stages
 
 ```mermaid
-flowchart TD
-    A["STAGE 1<br>closed 20 April 2026"] --> B["Submit a cheatsheet<br>10 KB, prompt and text together"]
-    B --> C["A language model reads it,<br>then answers one question"]
-    C --> D["true or false"]
-    D --> E["Scored on correctness alone.<br>Fluent and wrong scores the same<br>as careful and wrong"]
-    E --> F["STAGE 2<br>closed 31 August 2026"]
-    F --> G["Submit a solver<br>500 KB, standard library only"]
-    G --> H["A Lean 4 certificate:<br>a proof, or a counterexample"]
-    H --> I(["Deterministic Lean judge"])
-    I --> J["accepted"]
-    I --> K["rejected, which is worth<br>exactly what no answer is worth"]
+flowchart LR
+    A["Stage 1<br>Cheatsheet, 10 KB"] --> B["Language model"]
+    B --> C["true or false"]
+    C -.->|"an answer is no longer enough"| D["Stage 2<br>solver.py, 500 KB"]
+    D --> E["Lean 4 certificate"]
+    E --> F(["Deterministic judge"])
+    F --> G["accepted or rejected"]
 ```
 
-The move between the two is the whole point of the competition. Stage 1 asks
-what a model believes. Stage 2 asks it to show its working to something that
-cannot be persuaded.
+Stage 1 rewards a confident answer, so a model that is fluent and wrong scores
+the same as one that is careful and wrong. Stage 2 removes that: an answer is
+worth nothing unless it arrives with a certificate.
 
 <br>
 
