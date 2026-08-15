@@ -1,5 +1,10 @@
 <div align="center">
 
+<img src="social_preview.png" alt="SAIR Mathematics Distillation Challenge, Stage 1" width="100%">
+
+<br>
+<br>
+
 # Stage 1: the cheatsheet
 
 **One page of distilled algebra, sent to a model before every question.**

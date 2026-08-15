@@ -1,5 +1,10 @@
 <div align="center">
 
+<img src="social_preview.png" alt="SAIR Mathematics Distillation Challenge, Stage 2" width="100%">
+
+<br>
+<br>
+
 # Stage 2: the certificate
 
 **Every answer arrives with a proof a machine will check, or it does not count.**
