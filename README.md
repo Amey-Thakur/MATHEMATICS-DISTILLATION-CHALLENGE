@@ -1,8 +1,8 @@
 <div align="center">
 
-<br>
+<a href="https://competition.sair.foundation/competitions/mathematics-distillation-challenge-equational-theories-stage2/overview" title="SAIR Foundation, open the competition"><img src=".github/assets/sair-mark.png" alt="SAIR Foundation mark, links to the competition" width="76"></a>
 
-# SAIR Mathematics Distillation Challenge
+# Mathematics Distillation Challenge
 
 **Equational Theories, Stage 1 and Stage 2, worked end to end.**
 
