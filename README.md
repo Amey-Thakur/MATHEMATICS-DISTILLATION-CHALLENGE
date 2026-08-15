@@ -73,12 +73,16 @@ co-founder of the SAIR Foundation), and the SAIR Foundation.
 
 ```mermaid
 flowchart LR
-    A["Stage 1<br>Cheatsheet, 10 KB"] --> B["Language model"]
-    B --> C["true or false"]
-    C -.->|"an answer is no longer enough"| D["Stage 2<br>solver.py, 500 KB"]
-    D --> E["Lean 4 certificate"]
-    E --> F(["Deterministic judge"])
-    F --> G["accepted or rejected"]
+    subgraph S1["Stage 1 &nbsp; closed 20 April 2026"]
+        A["Cheatsheet<br>10 KB"] --> B["Language model"]
+        B --> C["true or false"]
+    end
+    subgraph S2["Stage 2 &nbsp; closed 31 August 2026"]
+        D["solver.py<br>500 KB"] --> E["Lean 4 certificate"]
+        E --> F(["Deterministic judge"])
+        F --> G["accepted or rejected"]
+    end
+    C -.->|"an answer is no longer enough"| D
 ```
 
 Stage 1 rewards a confident answer, so a model that is fluent and wrong scores
