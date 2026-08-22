@@ -18,6 +18,29 @@
 
 ---
 
+## The result
+
+Final standing on the scored evaluation leaderboard.
+
+| | |
+| --- | --- |
+| Team | AVATAR, `EQT01-T00899` |
+| Rank | 235 |
+| Score | 2,889 |
+| Accuracy | 53.5% |
+| F1 | 41.0% |
+| Parse rate | 100% |
+| Cost per problem | $0.00040 |
+| Cheatsheet size | 2.81 KB of the 10 KB allowed |
+
+Read those two middle numbers together rather than separately. Accuracy of 53.5
+per cent is barely above the coin, and an F1 of 41.0 says the cheatsheet was
+guessing false more often than the set warranted. The parse rate is the only
+clean number here: every answer came back in a form the judge could read.
+
+Using less than a third of the size budget was not restraint. It was the honest
+limit of what the distillation had to say.
+
 ## What was asked
 
 Submit a **complete prompt**: the template and the cheatsheet text together,
