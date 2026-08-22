@@ -29,11 +29,11 @@ check, rather than a claim a person has to trust?
 
 <br>
 
-<img src=".github/assets/distillation-stage1.gif" alt="Stage 1: a 2.81 KB cheatsheet within a 10 KB cap, read by a language model at temperature zero returning true or false." width="100%">
+<a href="https://github.com/Amey-Thakur" title="Amey Thakur on GitHub"><img src=".github/assets/distillation-stage1.gif" alt="Stage 1: a 2.81 KB cheatsheet within a 10 KB cap, read by a language model at temperature zero returning true or false." width="100%"></a>
 
 <br>
 
-<img src=".github/assets/distillation-stage2.gif" alt="Stage 2: a 500 KB deterministic-first solver emitting a Lean 4 certificate for each goal, accepted or rejected by a deterministic judge." width="100%">
+<a href="https://github.com/Amey-Thakur" title="Amey Thakur on GitHub"><img src=".github/assets/distillation-stage2.gif" alt="Stage 2: a 500 KB deterministic-first solver emitting a Lean 4 certificate for each goal, accepted or rejected by a deterministic judge." width="100%"></a>
 
 </div>
 

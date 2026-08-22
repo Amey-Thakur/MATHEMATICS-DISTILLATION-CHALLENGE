@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../.github/assets/distillation-stage1.gif" alt="Stage 1: a 2.81 KB cheatsheet within a 10 KB cap, read by a language model at temperature zero, with the final accuracy, F1, parse rate and cost per problem." width="100%">
+<a href="https://github.com/Amey-Thakur" title="Amey Thakur on GitHub"><img src="../.github/assets/distillation-stage1.gif" alt="Stage 1: a 2.81 KB cheatsheet within a 10 KB cap, read by a language model at temperature zero, with the final accuracy, F1, parse rate and cost per problem." width="100%"></a>
 
 <br>
 <br>

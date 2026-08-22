@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../.github/assets/distillation-stage2.gif" alt="Stage 2: a 500 KB deterministic-first solver emitting a Lean 4 certificate for each goal, which a deterministic judge accepts or rejects." width="100%">
+<a href="https://github.com/Amey-Thakur" title="Amey Thakur on GitHub"><img src="../.github/assets/distillation-stage2.gif" alt="Stage 2: a 500 KB deterministic-first solver emitting a Lean 4 certificate for each goal, which a deterministic judge accepts or rejects." width="100%"></a>
 
 <br>
 <br>
