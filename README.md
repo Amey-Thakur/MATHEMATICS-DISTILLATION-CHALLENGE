@@ -2,10 +2,6 @@
 
 <a href="https://competition.sair.foundation/competitions/mathematics-distillation-challenge-equational-theories-stage2/overview" title="SAIR Foundation, open the competition"><img src=".github/assets/sair-mark.png" alt="SAIR Foundation mark, links to the competition" width="76"></a>
 
-<img src=".github/assets/distillation-stage1.gif" alt="Stage 1: a 2.81 KB cheatsheet, within a 10 KB cap, read by a language model at temperature zero returning true or false, with the final accuracy, F1, parse rate and cost per problem." width="760">
-
-<img src=".github/assets/distillation-stage2.gif" alt="Stage 2: a 500 KB deterministic-first solver emitting a Lean 4 certificate for each goal, which a deterministic judge accepts or rejects." width="760">
-
 # Mathematics Distillation Challenge
 
 **Equational Theories, Stage 1 and Stage 2, worked end to end.**
@@ -33,7 +29,11 @@ check, rather than a claim a person has to trust?
 
 <br>
 
-<img src=".github/social-preview.png" alt="SAIR Mathematics Distillation Challenge: Equational Theories, Stage 1 and Stage 2, distil then prove and verify in Lean 4" width="100%">
+<img src=".github/assets/distillation-stage1.gif" alt="Stage 1: a 2.81 KB cheatsheet within a 10 KB cap, read by a language model at temperature zero returning true or false." width="100%">
+
+<br>
+
+<img src=".github/assets/distillation-stage2.gif" alt="Stage 2: a 500 KB deterministic-first solver emitting a Lean 4 certificate for each goal, accepted or rejected by a deterministic judge." width="100%">
 
 </div>
 

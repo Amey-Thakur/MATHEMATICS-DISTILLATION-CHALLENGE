@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="social_preview.png" alt="SAIR Mathematics Distillation Challenge, Stage 2" width="100%">
+<img src="../.github/assets/distillation-stage2.gif" alt="Stage 2: a 500 KB deterministic-first solver emitting a Lean 4 certificate for each goal, which a deterministic judge accepts or rejects." width="100%">
 
 <br>
 <br>
