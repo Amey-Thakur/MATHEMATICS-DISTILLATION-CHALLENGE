@@ -1,23 +1,58 @@
 {
-  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
-  "@type": "SoftwareSourceCode",
-  "license": "https://spdx.org/licenses/CC-BY-NC-SA-4.0.html",
-  "name": "SAIR Mathematics Distillation Challenge",
-  "version": "1.0.0",
-  "runtimePlatform": "Lean 4, Python 3.12",
-  "author": [
-    {
-      "@type": "Person",
-      "givenName": "Amey",
-      "familyName": "Thakur",
-      "id": "https://orcid.org/0000-0001-5644-1575"
-    }
-  ],
-  "description": "Formalizing and distilling magma equational theories for AI reasoning benchmarks. A comprehensive research repository for the SAIR foundation challenge, targeting high-density logic cliques and 'Master Law' identification.",
-  "programmingLanguage": [
-    "Lean 4",
-    "Python",
-    "JSONL",
-    "Markdown"
-  ]
+    "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+    "@type": "SoftwareSourceCode",
+    "name": "SAIR Mathematics Distillation Challenge",
+    "description": "Formalizing and distilling magma equational theories for AI reasoning benchmarks. A comprehensive research repository for the SAIR foundation challenge, targeting high-density logic cliques and 'Master Law' identification.",
+    "identifier": "SAIR-MATHEMATICS-DISTILLATION-CHALLENGE",
+    "license": "https://spdx.org/licenses/CC-BY-NC-SA-4.0.html",
+    "programmingLanguage": [
+        "Lean 4",
+        "Python",
+        "JSONL",
+        "Markdown"
+    ],
+    "author": [
+        {
+            "@type": "Person",
+            "givenName": "Amey",
+            "familyName": "Thakur",
+            "id": "https://orcid.org/0000-0001-5644-1575"
+        }
+    ],
+    "dateCreated": "2026-03-31",
+    "dateReleased": "2026-03-31",
+    "codeRepository": "https://github.com/Amey-Thakur/SAIR-MATHEMATICS-DISTILLATION-CHALLENGE",
+    "developmentStatus": "complete",
+    "runtimePlatform": "Lean 4, Python 3.12",
+    "keywords": [
+        "Algebra",
+        "Automated Theorem Proving",
+        "Competition",
+        "Counterexamples",
+        "Equational Reasoning",
+        "Equational Theories",
+        "Formal Verification",
+        "Knowledge Distillation",
+        "Lean",
+        "Lean 4",
+        "Magma",
+        "Mathematics",
+        "Mathematics Distillation",
+        "SAIR",
+        "SAIR Foundation",
+        "Universal Algebra",
+        "Damek Davis",
+        "Terence Tao",
+        "True",
+        "False",
+        "Solo",
+        "Marathon",
+        "Amey Thakur",
+        "amey",
+        "ameythakur",
+        "amey-thakur",
+        "ameyarc"
+    ],
+    "url": "https://competition.sair.foundation/competitions/mathematics-distillation-challenge-equational-theories-stage2/overview",
+    "version": "1.0.0"
 }

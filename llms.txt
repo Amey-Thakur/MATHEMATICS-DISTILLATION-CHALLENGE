@@ -1,0 +1,29 @@
+# Mathematics Distillation Challenge
+
+> Mathematics Distillation Challenge, Equational Theories. Stage 1
+> cheatsheet and Stage 2 Lean 4 certificate solver for the SAIR Foundation
+> competition.
+
+Author: Amey Thakur, ORCID 0000-0001-5644-1575
+Licence: CC BY 4.0, attribution required
+Repository created: 31 March 2026
+
+## What is in this repository
+
+- docs, 2 files
+- stage1, 2473 files
+- stage2, 14 files
+
+## Subject terms
+
+algebra, automated-theorem-proving, competition, counterexamples,
+equational-reasoning, equational-theories, formal-verification,
+knowledge-distillation, lean, lean4, magma, mathematics,
+mathematics-distillation, sair, sair-foundation, universal-algebra
+
+## Where this sits
+
+- This repository: https://github.com/Amey-Thakur/SAIR-MATHEMATICS-DISTILLATION-CHALLENGE
+- Project page: https://competition.sair.foundation/competitions/mathematics-distillation-challenge-equational-theories-stage2/overview
+- Author: https://github.com/Amey-Thakur
+- Research notes and reflections: https://amey-thakur.github.io/
